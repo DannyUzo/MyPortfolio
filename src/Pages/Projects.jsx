@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 
+import { Slide } from "react-awesome-reveal";
+
 const Projects = () => {
   return (
     <div className="projects">
@@ -12,6 +14,7 @@ const Projects = () => {
           My projects<span>.</span>{" "}
         </h2>
 <p>Take a look at some of my recent projects to get a sense of my work:</p>
+<Slide>
         <div className="projectBox">
           <div className="ProjectCard">
             <a href="https://weather-app-smoky-gamma-35.vercel.app/">
@@ -31,6 +34,7 @@ const Projects = () => {
             <a href="">Nike Landing page</a>
           </div>
         </div>
+</Slide>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import { Slide, Fade  } from 'react-awesome-reveal'
 
 const Home = () => {
   return (
@@ -8,14 +9,19 @@ const Home = () => {
         <Navbar />
       </div>
       <div className="main">
+        <Slide triggerOnce>
         <h1>
           Hi, I'm <span>Daniel</span> .{" "}
         </h1>
+        </Slide>
+        <Fade>
         <h3>
         Frontend Web Developer in Lagos, Nigeria 
         </h3>
+        </Fade>
 
         <div className="aboutMe">
+            <Fade>
         <strong>
         About Me 
         </strong>
@@ -27,6 +33,8 @@ const Home = () => {
         frontend development. My goal is to create digital solutions that not
         only look great but also provide exceptional user experiences.
         </p>
+            </Fade>
+
         </div>
       </div>
     </div>
