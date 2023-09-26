@@ -13,28 +13,36 @@ const Projects = () => {
         <h2>
           My projects<span>.</span>{" "}
         </h2>
-<p>Take a look at some of my recent projects to get a sense of my work:</p>
-<Slide>
+        <p>
+          Take a look at some of my recent projects to get a sense of my work:
+        </p>
         <div className="projectBox">
-          <div className="ProjectCard">
-            <a href="https://weather-app-smoky-gamma-35.vercel.app/">
-              {" "}
-              Weather App
-            </a>
-          </div>
-          <div className="ProjectCard">
-            <a href="https://resturantsite.vercel.app/">
-              Restaurant Landing Page{" "}
-            </a>
-          </div>
-          <div className="ProjectCard">
-            <a href="https://gallery-task3.vercel.app/">Image Gallery</a>
-          </div>
-          <div className="ProjectCard">
-            <a href="">Nike Landing page</a>
-          </div>
+          <Slide>
+            <div className="ProjectCard">
+              <a href="https://weather-app-smoky-gamma-35.vercel.app/">
+                {" "}
+                Weather App
+              </a>
+            </div>
+          </Slide>
+          <Slide>
+            <div className="ProjectCard">
+              <a href="https://resturantsite.vercel.app/">
+                Restaurant Landing Page{" "}
+              </a>
+            </div>
+          </Slide>
+          <Slide>
+            <div className="ProjectCard">
+              <a href="https://gallery-task3.vercel.app/">Image Gallery</a>
+            </div>
+          </Slide>
+          <Slide>
+            <div className="ProjectCard">
+              <a href="https://nikepage-five.vercel.app/">Nike Landing page</a>
+            </div>
+          </Slide>
         </div>
-</Slide>
       </div>
     </div>
   );
