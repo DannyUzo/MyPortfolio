@@ -1,7 +1,9 @@
 import React from "react";
 import Navbar from "../components/Navbar";
-
+import ProjectCard from "../components/ProjectCard";
+import { Collaborations } from "../components/ProjectCard";
 import { Slide } from "react-awesome-reveal";
+import { projectDetails, collabProjects } from "../constants";
 
 const Projects = () => {
   return (
@@ -11,37 +13,26 @@ const Projects = () => {
       </div>
       <div className="main">
         <h2>
-          My projects<span>.</span>{" "}
+          My projects<span> .</span>{" "}
         </h2>
         <p>
           Take a look at some of my recent projects to get a sense of my work:
         </p>
-        <div className="projectBox">
-          <Slide>
-            <div className="ProjectCard">
-              <a href="https://weather-app-smoky-gamma-35.vercel.app/">
-                {" "}
-                Weather App
-              </a>
-            </div>
-          </Slide>
-          <Slide>
-            <div className="ProjectCard">
-              <a href="https://resturantsite.vercel.app/">
-                Restaurant Landing Page{" "}
-              </a>
-            </div>
-          </Slide>
-          <Slide>
-            <div className="ProjectCard">
-              <a href="https://gallery-task3.vercel.app/">Image Gallery</a>
-            </div>
-          </Slide>
-          <Slide>
-            <div className="ProjectCard">
-              <a href="https://nikepage-five.vercel.app/">Nike Landing page</a>
-            </div>
-          </Slide>
+        <Slide>
+          <strong>Personal Projects</strong>
+          <div className="projectBox">
+            {projectDetails.map((project) => (
+              <ProjectCard key={project.id} {...project} />
+            ))}
+          </div>
+        </Slide>
+          <strong>Collaborations</strong>
+        <div>
+          <div className="projectBox">
+              {collabProjects.map((project) => (
+                <Collaborations key={project.id} {...project}/>
+              ))}
+              </div>
         </div>
       </div>
     </div>
