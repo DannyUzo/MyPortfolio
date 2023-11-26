@@ -5,7 +5,10 @@
 .App {
   width: 100%;
   color: white;
+  gap: 80px;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 .home,
 .about,
@@ -17,7 +20,6 @@
   display: flex;
   flex-direction: column;
   gap: 50px;
-  height: 100vh;
 }
 .mainWrapper {
   width: 100%;
@@ -188,12 +190,13 @@
 }
 .main h1 {
   text-align: center;
-  color:rgb(187, 193, 199);
+  color:rgb(126, 127, 128);
   font-size: 70px;
   font-family: Tahoma;
 }
 .main h2{
-  color:rgb(187, 193, 199);
+  color:rgb(126, 127, 128);
+  font-size: 36px;
 }
 .main h3{
   color:#959595;
@@ -216,7 +219,7 @@ nav {
   margin: 0 auto;
 }
 .logo {
-  color: rgb(187, 193, 199);
+  color: rgb(126, 127, 128);
   font-size: 22px;
   font-weight: bold;
   font-family: Tahoma;
@@ -233,31 +236,12 @@ a {
   cursor: pointer;
   transition: 0.7s;
 }
-a.active {
-  color: rgb(13, 166, 227);
-  line-height: 50px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.7s;
-}
 img {
   object-fit: cover;
   background-position: center;
   width: 100%;
 }
-.btn-1 {
-  border: 1px solid maroon;
-  background: black;
-  color: white;
-  padding: 10px;
-}
-.btn-2 {
-  background: maroon;
-  outline: none;
-  border: 1px solid maroon;
-  color: white;
-  padding: 10px;
-}
+
 i {
   color: white;
   display: none;
@@ -397,7 +381,7 @@ button {
     gap: 10px;
   }
 }
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .loader {
     display: none;
   }
@@ -411,6 +395,9 @@ button {
 }
 
 @media (max-width: 468px) {
+.App{
+  gap: 20px;
+}
   .main {
     padding: 30px;
   }
@@ -421,6 +408,12 @@ button {
     width: auto;
     padding: 10px;
     text-align: center;
+  }
+  .aboutMe p {
+    color:#848383;
+    width: 80%;
+    line-height: 25px;
+    text-align: left;
   }
   a {
     padding: 5px;
@@ -433,6 +426,9 @@ button {
     box-sizing: border-box;
     width: 100%;
     transition: 0.7s;
+  }
+  .skills{
+    position: relative;
   }
   .main p {
     width: 80%;
@@ -453,5 +449,28 @@ button {
     height: auto;
     max-height: 300px;
     padding: 5px;
+  }
+}
+@media (max-width:375px){
+  .skillImages {
+    height: auto;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  .skillText{
+    width: 95%;
+  }
+  .main P{
+    width:95%;
+  }
+  .aboutMe p {
+    color:#848383;
+    width: 95%;
+    line-height: 25px;
+    text-align: left;
   }
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
@@ -10,13 +9,10 @@ import { Fade } from "react-awesome-reveal";
 const About = () => {
   return (
     <div className="about">
-      <div className="nav">
-        <Navbar />
-      </div>
       <div className="main">
-        <h1>
+        <h2>
           Let's <span>Connect</span> .{" "}
-        </h1>
+        </h2>
         <p>
           I'm always open to new opportunities and collaborations. If you have a
           project in mind or would like to discuss how I can contribute to your

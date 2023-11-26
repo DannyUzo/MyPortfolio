@@ -45,7 +45,6 @@ const Home = () => {
             <span></span>
             <span></span>
             <span></span>
-            <span></span>
           </div>
         </Fade>
       </div>

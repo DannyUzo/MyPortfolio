@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import ProjectCard from "../components/ProjectCard";
 import { Collaborations } from "../components/ProjectCard";
 import { Slide } from "react-awesome-reveal";
@@ -8,9 +7,6 @@ import { projectDetails, collabProjects } from "../constants";
 const Projects = () => {
   return (
     <div className="projects">
-      <div className="nav">
-        <Navbar />
-      </div>
       <div className="main">
         <h2>
           My projects<span> .</span>{" "}
@@ -18,7 +14,7 @@ const Projects = () => {
         <p>
           Take a look at some of my recent projects to get a sense of my work:
         </p>
-        <Slide>
+        <Slide triggerOnce>
           <strong>Personal Projects</strong>
           <div className="projectBox">
             {projectDetails.map((project) => (

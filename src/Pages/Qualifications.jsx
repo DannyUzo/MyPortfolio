@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 
 import { Fade } from "react-awesome-reveal";
 import { Skills } from "../constants";
@@ -8,9 +7,6 @@ import SkillCard from "../components/SkillCard";
 const Qualifications = () => {
   return (
     <div className="qualifications">
-      <div className="nav">
-        <Navbar />
-      </div>
       <div className="main">
         <Fade triggerOnce>
           <h2>
@@ -28,8 +24,6 @@ const Qualifications = () => {
             seamless user experiences.
           </p>
         </Fade>
-        <div className="images"></div>
-
         <div className="skills">
           <strong>Skills</strong>
           <Fade>
