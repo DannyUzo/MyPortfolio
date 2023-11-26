@@ -427,7 +427,6 @@ button {
   }
   nav {
     display: flex;
-    position: static;
     flex-direction: column;
     justify-content: center;
     padding: 10px;

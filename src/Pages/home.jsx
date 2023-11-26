@@ -14,7 +14,7 @@ const Home = () => {
             <h1>
               Hi, I'm <span>Daniel</span> .{" "}
             </h1>
-            <h3>Frontend Web Developer in Lagos, Nigeria</h3>
+            <h3>Frontend Web Developer in Lagos, Nigeria.</h3>
 
             <div className="aboutMe">
               <strong>About Me</strong>
