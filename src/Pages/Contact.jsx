@@ -23,7 +23,7 @@ const About = () => {
             <h5>Let's stay connected! You can find me on:</h5>
             <ul>
               <li>
-                <a href="www.linkedin.com/in/daniel-uzodinma-6ba3b7293">
+                <a href="https://linkedin.com/in/daniel-uzodinma-6ba3b7293">
                   <FaLinkedin /> Daniel Uzodinma
                 </a>
               </li>
