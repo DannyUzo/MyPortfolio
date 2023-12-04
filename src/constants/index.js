@@ -7,6 +7,11 @@ import tw from "../Assets/images/tailwind-css-icon.png";
 import next from "../Assets/images/next-logo.png";
 import firebase from "../Assets/images/firebase.png";
 import github from "../Assets/images/github.png";
+import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
+import { CiMail } from "react-icons/ci";
+import { IoCallOutline } from "react-icons/io5";
+
+
 
 export const projectDetails = [
   {
@@ -77,3 +82,31 @@ export const Skills = [
   { id:8, imgUrl: firebase, label: "Firebase" },
   { id:9, imgUrl: github, label: "Github" }
 ];
+
+export const ContactInfo = [
+  {
+    id:1,
+    href: "https://linkedin.com/in/daniel-uzodinma-6ba3b7293",
+    icon: <FaLinkedin />,
+  },
+  {
+    id:2,
+    href: "https://github.com/DannyUzo",
+    icon: <FaGithub />,
+  },
+  {
+    id:3,
+    href: "mailto:uzodinmadaniel42@gmail",
+    icon:  <CiMail />,
+  },
+  {
+    id:4,
+    href: "https://wa.me/08079328196",
+    icon: <FaWhatsapp />,
+  },
+  {
+    id:5,
+    href: "tel:08079328196",
+    icon: <IoCallOutline />
+  }
+]
