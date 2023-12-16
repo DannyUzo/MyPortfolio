@@ -7,6 +7,7 @@ import tw from "../Assets/images/tailwind-css-icon.png";
 import next from "../Assets/images/next-logo.png";
 import firebase from "../Assets/images/firebase.png";
 import github from "../Assets/images/github.png";
+import weatherApp from "../Assets/images/weatherApp.png"
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoCallOutline } from "react-icons/io5";
@@ -16,6 +17,7 @@ import { IoCallOutline } from "react-icons/io5";
 export const projectDetails = [
   {
     id: 1,
+    imgUrl: weatherApp,
     about: "Explore weather with my app—humidity, wind speed, astronomy, air quality, and more. Get detailed insights for your location effortlessly",
     href: "https://weather-app-smoky-gamma-35.vercel.app/",
     github: "https://github.com/DannyUzo/Weather-App",
@@ -101,12 +103,12 @@ export const ContactInfo = [
   },
   {
     id:4,
-    href: "https://wa.me/08079328196",
+    href: "https://wa.me/+2348079328196",
     icon: <FaWhatsapp />,
   },
   {
     id:5,
-    href: "tel:08079328196",
+    href: "tel:+2348079328196",
     icon: <IoCallOutline />
   }
 ]

@@ -17,7 +17,7 @@ const Qualifications = () => {
           <p className="skillText">
             I'm a frontend web developer proficient in HTML5, CSS3, JavaScript,
             and React, crafting visually stunning and responsive designs. I
-            excel in UI/UX design, optimizing web performance, and ensuring web
+            excel in optimizing web performance, and ensuring web
             accessibility. With expertise in Tailwind CSS, SCSS, and Next.js, I
             manage projects efficiently using Git version control and project
             management tools, guaranteeing cross-browser compatibility for
