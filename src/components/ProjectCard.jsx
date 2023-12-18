@@ -10,17 +10,13 @@ const ProjectCard = ({ name, href, github, about, framework }) => {
         <p>{about}</p>
         <sub>{framework}</sub>
         <div className="LinkDiv">
-          <div>
-            <a href={href}>
-              <CiGlobe />
-              Visit
-            </a>
+          <div className="projectLinks">
+            <CiGlobe />
+            <a href={href}>Visit</a>
           </div>
-          <div>
-            <a href={github}>
-              <FaCode />
-              Get Code
-            </a>
+          <div className="projectLinks">
+            <FaCode />
+            <a href={github}>Get Code</a>
           </div>
         </div>
       </div>
@@ -37,9 +33,9 @@ export const Collaborations = ({ name, href, about }) => {
         <h3>{name}</h3>
         <p>{about}</p>
         <div className="LinkDiv">
-          <div>
-            <a href={href}>
+          <div className="projectLinks">
               <CiGlobe />
+            <a href={href}>
               Visit
             </a>
           </div>

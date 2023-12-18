@@ -6,7 +6,7 @@ import { ContactInfo } from "../constants";
 
 const About = () => {
   return (
-    <div className="about">
+    <div className="contact">
       <div className="main">
         <h2>
           Let's <span>Connect</span> .{" "}
