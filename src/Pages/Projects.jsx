@@ -22,13 +22,13 @@ const Projects = () => {
             ))}
           </div>
         </Fade>
-          <strong>Collaborations</strong>
+        <strong>Collaborations</strong>
         <div>
           <div className="projectBox">
-              {collabProjects.map((project) => (
-                <Collaborations key={project.id} {...project}/>
-              ))}
-              </div>
+            {collabProjects.map((project) => (
+              <Collaborations key={project.id} {...project} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

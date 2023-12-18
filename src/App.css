@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
 }
+
 .home,
 .contact,
 .projects,
@@ -19,8 +20,10 @@
   color: black;
   display: flex;
   flex-direction: column;
+  -webkit-gap: 50px;
   gap: 50px;
 }
+
 .mainWrapper {
   width: 100%;
   display: flex;
@@ -164,7 +167,6 @@
   }
 }
 
-
 .main {
   display: flex;
   flex-direction: column;
@@ -176,10 +178,9 @@
   justify-content: center;
   text-align: left;
 }
-.home{
+.home {
   align-items: flex-start;
   justify-content: start;
-
 }
 .main span {
   color: rgb(13, 166, 227);
@@ -188,7 +189,7 @@
   color: rgb(13, 166, 227);
   position: relative;
 }
-.main h5{
+.main h5 {
   color: #848383;
 }
 
@@ -202,7 +203,7 @@
   text-align: left;
 }
 .aboutMe p {
-  color:#848383;
+  color: #848383;
   width: 400px;
   line-height: 25px;
   text-align: left;
@@ -217,19 +218,19 @@
   width: 100%;
 }
 .main h1 {
-  color:rgb(126, 127, 128);
+  color: rgb(126, 127, 128);
   font-size: 80px;
   font-family: Tahoma;
 }
-.main h2{
-  color:rgb(126, 127, 128);
+.main h2 {
+  color: rgb(126, 127, 128);
   font-size: 36px;
 }
-.main h3{
-  color:#959595;
+.main h3 {
+  color: #959595;
 }
 .main p {
-  color:#848383;
+  color: #848383;
   max-width: 550px;
 }
 nav {
@@ -290,6 +291,11 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
+  justify-content: -webkit-center;
+  align-items: -webkit-center;
+  display: -webkit-flex;
+  flex-wrap: -webkit-wrap;
+  -webkit-gap: 30px;
 }
 .skillImages img {
   height: 50px;
@@ -297,13 +303,17 @@ button {
 }
 .projectBox {
   width: auto;
+  display: -ms-grid;
   display: grid;
+  -ms-grid-columns: 1fr 10px 1fr 10px 1fr;
   grid-template-columns: repeat(3, 1fr);
   align-items: center;
   justify-content: center;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   gap: 10px;
 }
+
 .ProjectCard {
   width: 250px;
   height: 280px;
@@ -329,7 +339,7 @@ button {
   border-radius: 6px;
   text-decoration: none;
   padding: 8px;
- gap: 5px;
+  gap: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -337,7 +347,7 @@ button {
   font-weight: 300;
 }
 
-.ProjectCard h3{
+.ProjectCard h3 {
   font-family: Lucida Sans;
   color: rgb(187, 193, 199);
 }
@@ -347,11 +357,11 @@ button {
   border-radius: 6px;
   font-weight: 300;
 }
-.ProjectImg{
+.ProjectImg {
   border-radius: 10px;
   border: none;
 }
-.LinkDiv{
+.LinkDiv {
   display: flex;
   gap: 5px;
   align-items: center;
@@ -368,7 +378,7 @@ button {
   gap: 20px;
 }
 
-.contactCard a{
+.contactCard a {
   padding: 10px;
   color: rgb(187, 193, 199);
   text-decoration: none;
@@ -376,65 +386,67 @@ button {
   line-height: 50px;
   transition: 0.7s;
 }
-.contact p{
+.contact p {
   text-align: center;
 }
 
-
-form{
+form {
   width: 320px;
   height: 450px;
+  display: -webkit-flex;
   display: flex;
   flex-direction: column;
+  -webkit-justify-content: space-between;
   justify-content: space-between;
   padding: 10px;
   gap: 10px;
+  -webkit-gap: 10px;
   box-sizing: border-box;
   border-radius: 6px;
   box-shadow: 0.5px 0.5px 3px rgb(13, 88, 227);
 }
 
-.formWrapper{
+.formWrapper {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-form label{
+form label {
   font-family: Tahoma;
   font-weight: 500;
   color: #848383;
 }
-form input{
+form input {
   outline: #848383;
   border: none;
   background-color: #f3f1f1;
   border-radius: 6px;
-  padding: 15px;  
+  padding: 15px;
 }
-form input::placeholder{
+form input::placeholder {
   font-family: sans-serif;
 }
-form textarea::placeholder{
+form textarea::placeholder {
   font-family: sans-serif;
 }
-form textarea{
+form textarea {
   outline: #848383;
   border: none;
   background-color: #f3f1f1;
   border-radius: 6px;
   padding: 10px;
- resize: none;
- height: 100px;
+  resize: none;
+  height: 100px;
 }
-form button{
+form button {
   border-radius: 6px;
   background-color: rgb(126, 127, 128);
   color: white;
   width: 50px;
   padding: 3px;
 }
-.ContactWrapper{
+.ContactWrapper {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
@@ -443,24 +455,24 @@ form button{
   gap: 10px;
 }
 
-.phone{
+.phone {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 3px;
 }
-.skillCard{
+.skillCard {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.skillCard sub{
+.skillCard sub {
   color: #848383;
   font-weight: 400;
   position: relative;
 }
-.skillCard sub::after{
+.skillCard sub::after {
   content: "";
   width: 100%;
   height: 1px;
@@ -470,29 +482,33 @@ form button{
   top: 17px;
 }
 
-footer{
+footer {
+  display: -webkit-flex;
   display: flex;
   flex-direction: column;
+  -webkit-justify-content: center;
   justify-content: center;
+  -webkit-align-items: center;
   align-items: center;
   text-align: center;
   padding: 20px;
   gap: 10px;
+  -webkit-gap: 10px;
 }
-hr{
+
+hr {
   width: 80%;
 }
 
-footer span{
-  color:#959595;
+footer span {
+  color: #959595;
 }
 
-@media (max-width: 1024px){
-  .loader{
-display: none;
+@media (max-width: 1024px) {
+  .loader {
+    display: none;
   }
 }
-
 
 @media (max-width: 780px) {
   .projectBox {
@@ -525,7 +541,7 @@ display: none;
     justify-content: space-between;
     margin: 0 auto;
   }
-  form{
+  form {
     width: 320px;
     height: 450px;
     display: flex;
@@ -559,9 +575,9 @@ display: none;
 }
 
 @media (max-width: 468px) {
-.App{
-  gap: 20px;
-}
+  .App {
+    gap: 20px;
+  }
   .main {
     padding: 30px;
   }
@@ -574,7 +590,7 @@ display: none;
     text-align: center;
   }
   .aboutMe p {
-    color:#848383;
+    color: #848383;
     width: 80%;
     line-height: 25px;
     text-align: left;
@@ -582,10 +598,10 @@ display: none;
   a {
     padding: 5px;
   }
-.contactCard{
-  padding:5px 10px 5px 10px;
-}
-  .skills{
+  .contactCard {
+    padding: 5px 10px 5px 10px;
+  }
+  .skills {
     position: relative;
   }
   .main p {
@@ -593,10 +609,10 @@ display: none;
     line-height: 25px;
   }
 
-  .projects p{
+  .projects p {
     text-align: center;
   }
-  
+
   .projectBox {
     width: 100%;
     display: flex;
@@ -613,18 +629,18 @@ display: none;
     padding: 10px;
   }
 
-  .ContactWrapper{
+  .ContactWrapper {
     display: flex;
     flex-direction: column-reverse;
   }
-  .contactCard{
+  .contactCard {
     display: flex;
   }
-  hr{
+  hr {
     width: 100%;
   }
 }
-@media (max-width:375px){
+@media (max-width: 375px) {
   .skillImages {
     height: auto;
     position: relative;
@@ -634,19 +650,19 @@ display: none;
     flex-wrap: wrap;
     gap: 30px;
   }
-  .skillText{
+  .skillText {
     width: 95%;
   }
-  .main P{
-    width:95%;
+  .main P {
+    width: 95%;
   }
   .aboutMe p {
-    color:#848383;
+    color: #848383;
     width: 95%;
     line-height: 25px;
     text-align: left;
   }
-  form{
+  form {
     width: 300px;
   }
 }
