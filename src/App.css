@@ -511,6 +511,51 @@ display: none;
     padding: 10px;
     text-align: center;
   }
+  nav {
+    display: flex;
+    width: 100%;
+    position: fixed;
+    flex-wrap: wrap;
+    background: white;
+    z-index: 10;
+    padding: 10px;
+    box-sizing: border-box;
+    align-items: center;
+    box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+  form{
+    width: 320px;
+    height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
+  }
+  .contactCard {
+    box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
+    border-radius: 10px;
+    font-size: 21px;
+    padding: 10px;
+    gap: 20px;
+  }
+  .ProjectCard {
+    width: 250px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+    box-shadow: 0.2px 0.2px 3px rgb(13, 166, 227);
+  }
 }
 
 @media (max-width: 468px) {
