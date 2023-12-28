@@ -1,10 +1,14 @@
 * {
   margin: 0;
   padding: 0;
+  background-color: #ffffff;
+  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
 }
 .App {
   width: 100%;
   color: white;
+  background-color: #ffffff;
+  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
   gap: 80px;
   height: 100vh;
   display: flex;
@@ -15,7 +19,8 @@
 .contact,
 .projects,
 .qualifications {
-  background-color: white;
+  background-color: #ffffff;
+  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
   width: 100;
   color: black;
   display: flex;
@@ -238,7 +243,9 @@ nav {
   width: 100%;
   position: fixed;
   flex-wrap: wrap;
-  background: white;
+  background-color: #ffffff;
+  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
+
   z-index: 10;
   padding: 10px;
   box-sizing: border-box;
@@ -413,12 +420,12 @@ form {
   justify-content: center;
   flex-direction: column;
 }
-.infoWrapper{
+.infoWrapper {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
- padding: 5px;
+  padding: 5px;
 }
 form label {
   font-family: Tahoma;
@@ -503,6 +510,8 @@ footer {
   padding: 20px;
   gap: 10px;
   -webkit-gap: 10px;
+  background-color: #ffffff;
+  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
 }
 
 hr {
