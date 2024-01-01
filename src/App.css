@@ -318,8 +318,11 @@ button {
   flex-wrap: wrap;
   gap: 10px;
 }
-
-.ProjectCard {
+.message{
+display: flex;
+justify-content: center;
+}
+.ProjectCard , .message{
   width: 250px;
   height: 280px;
   display: flex;

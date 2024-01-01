@@ -1,10 +1,11 @@
 import React from "react";
 import { useForm, ValidationError } from "@formspree/react";
+import { Message } from "./contactMessage";
 
 export const ContactForm = () => {
   const [state, handleSubmit] = useForm("moqoojvb");
   if (state.succeeded) {
-    return <p>Your message has been sent</p>;
+    return <Message />;
   }
   return (
     <form onSubmit={handleSubmit}>
