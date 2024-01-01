@@ -7,6 +7,8 @@ import tw from "../Assets/images/tailwind-css-icon.png";
 import next from "../Assets/images/next-logo.png";
 import firebase from "../Assets/images/firebase.png";
 import github from "../Assets/images/github.png";
+import git from "../Assets/images/git.png";
+import figma from "../Assets/images/figma.png";
 import weatherApp from "../Assets/images/weatherApp.png"
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
@@ -81,8 +83,10 @@ export const Skills = [
   { id: 5, imgUrl: react, label: "ReactJs" },
   { id: 6, imgUrl: tw, label: "Tailwind" },
   { id: 7, imgUrl: next, label: "NextJs" },
-  { id:8, imgUrl: firebase, label: "Firebase" },
-  { id:9, imgUrl: github, label: "Github" }
+  { id: 8, imgUrl: git, label: "Git"},
+  { id: 9, imgUrl: firebase, label: "Firebase" },
+  { id: 10, imgUrl: github, label: "Github" },
+  { id: 11, imgUrl: figma, label: "Figma"}
 ];
 
 export const ContactInfo = [

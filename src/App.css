@@ -1,8 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
-  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
 }
 .App {
   width: 100%;
@@ -245,7 +243,6 @@ nav {
   flex-wrap: wrap;
   background-color: #ffffff;
   background-image: url(http://transparenttextures.com/patterns/brilliant.png);
-
   z-index: 10;
   padding: 10px;
   box-sizing: border-box;
@@ -289,6 +286,7 @@ button {
   display: none;
 }
 .skills {
+  max-width: 500px; 
   padding: 20px;
 }
 .skillImages {
