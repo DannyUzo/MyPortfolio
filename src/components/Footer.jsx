@@ -5,7 +5,7 @@ const Footer = () => {
     <footer>
         <hr/>
         <div>
-            <span>Copyright © Daniel Uzodinma 2023 All rights Reserved.</span>
+            <span>Copyright © Daniel Uzodinma 2024 All rights Reserved.</span>
         </div>
     </footer>
   )
