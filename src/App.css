@@ -6,7 +6,6 @@
   width: 100%;
   color: white;
   background-color: #ffffff;
-  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
   gap: 80px;
   height: 100vh;
   display: flex;
@@ -18,7 +17,6 @@
 .projects,
 .qualifications {
   background-color: #ffffff;
-  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
   width: 100;
   color: black;
   display: flex;
@@ -173,6 +171,7 @@
 .main {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
   margin-top: 50px;
   gap: 20px;
   padding: 15px;
@@ -242,7 +241,6 @@ nav {
   position: fixed;
   flex-wrap: wrap;
   background-color: #ffffff;
-  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
   z-index: 10;
   padding: 10px;
   box-sizing: border-box;
@@ -286,10 +284,15 @@ button {
   display: none;
 }
 .skills {
-  max-width: 500px; 
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
   padding: 20px;
 }
 .skillImages {
+  width: 400px;
   justify-content: center;
   align-items: center;
   margin: 30px auto;
@@ -308,6 +311,7 @@ button {
 }
 .projectBox {
   width: auto;
+  flex-wrap: wrap;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 1fr 10px 1fr 10px 1fr;
@@ -324,15 +328,14 @@ justify-content: center;
 }
 .ProjectCard , .message{
   width: 250px;
-  height: 280px;
+  height: 150px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border-radius: 10px;
   text-align: center;
   padding: 10px;
+  border: 1px solid rgb(13, 88, 227);
   box-sizing: border-box;
-  box-shadow: 0.2px 0.2px 3px rgb(13, 88, 227);
 }
 .ProjectCard p {
   font-family: Lucida Sans;
@@ -341,29 +344,26 @@ justify-content: center;
 }
 
 .ProjectCard .projectLinks {
-  border: 1px solid rgb(220, 241, 250);
   align-items: center;
-  color: rgb(187, 193, 199);
-  border-radius: 6px;
   text-decoration: none;
   padding: 8px;
   gap: 5px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: Lucida Sans;
-  font-weight: 300;
+  font-size: x-large;
+  justify-content: space-evenly;
 }
 
 .ProjectCard h3 {
   font-family: Lucida Sans;
   color: rgb(187, 193, 199);
 }
-
-.ProjectCard .projectLinks:hover {
-  background-color: rgb(245, 247, 255);
-  border-radius: 6px;
-  font-weight: 300;
+.ProjectCard sub{
+  font-family: Tahoma;
+  color: rgb(214, 217, 220);
+}
+.ProjectCard:hover {
+  background-color: rgb(249, 249, 249);
+  border: 1px solid rgb(16, 81, 203);
 }
 .ProjectImg {
   border-radius: 10px;
@@ -512,7 +512,6 @@ footer {
   gap: 10px;
   -webkit-gap: 10px;
   background-color: #ffffff;
-  background-image: url(http://transparenttextures.com/patterns/brilliant.png);
 }
 
 hr {
@@ -524,10 +523,55 @@ footer span {
   padding: 5px;
 }
 
+.experience {
+  max-width: 500px;
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  font-family: Tahoma;
+}
+
+.job {
+  margin-bottom: 20px;
+}
+
+.job h3 {
+  color: rgb(126, 127, 128);
+  margin-bottom: 5px;
+}
+
+.date {
+  font-style: italic;
+  color: #888;
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+li {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #848383;
+}
+
+
 @media (max-width: 1024px) {
   .loader {
     display: none;
   }
+  .skills{
+    display: flex;
+    justify-content: center;
+  }
+  /* .experience {
+    width: 100%;
+  }
+  .skillImages{
+    width: 100%;
+  } */
 }
 
 @media (max-width: 780px) {
@@ -580,18 +624,10 @@ footer span {
     padding: 10px;
     gap: 20px;
   }
-  .ProjectCard {
-    width: 250px;
-    height: 280px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border-radius: 10px;
-    text-align: center;
-    padding: 10px;
-    box-sizing: border-box;
-    box-shadow: 0.2px 0.2px 3px rgb(13, 166, 227);
-  }
+  /* .skills{
+
+    align-items: start;
+  } */
 }
 
 @media (max-width: 468px) {
@@ -639,16 +675,6 @@ footer span {
     justify-content: center;
     align-items: center;
   }
-  .ProjectCard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    text-align: center;
-    max-height: 300px;
-    padding: 10px;
-  }
-
   .ContactWrapper {
     display: flex;
     flex-direction: column-reverse;
@@ -657,6 +683,9 @@ footer span {
     display: flex;
   }
   hr {
+    width: 100%;
+  }
+  .skillImages{
     width: 100%;
   }
 }
