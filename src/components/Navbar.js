@@ -5,7 +5,7 @@ const Navbar = () => {
     <nav>
       <div className="logo">My Portfolio</div>
       <span>
-        <a href="https://drive.google.com/uc?export=download&id=1rRdQ9veOOuNYdTNzTterih-wnQf4S0Uo">
+        <a href="https://drive.google.com/uc?export=download&id=1ooviwrOaDa7C-jDEREgMeebV_n-002pAICJc0Jn8fs8">
           My Résumé
         </a>
       </span>
