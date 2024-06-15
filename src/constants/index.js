@@ -9,7 +9,6 @@ import firebase from "../Assets/images/firebase.png";
 import github from "../Assets/images/github.png";
 import git from "../Assets/images/git.png";
 import figma from "../Assets/images/figma.png";
-import weatherApp from "../Assets/images/weatherApp.png"
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoCallOutline } from "react-icons/io5";
@@ -19,61 +18,34 @@ import { IoCallOutline } from "react-icons/io5";
 export const projectDetails = [
   {
     id: 1,
-    imgUrl: weatherApp,
-    about: "Explore weather with my app—humidity, wind speed, astronomy, air quality, and more. Get detailed insights for your location effortlessly",
-    href: "https://weather-app-smoky-gamma-35.vercel.app/",
+    href: "https://weather-vistaa.vercel.app/",
     github: "https://github.com/DannyUzo/Weather-App",
-    framework: "React App & Css",
-    name: "Weather App",
+    framework: "ReactJs & Css",
+    name: "Weather Vista",
   },
   {
     id: 2,
-    about: "Search and explore a diverse collection of captivating images to enhance your creative projects.",
-    href: "https://gallery-task3.vercel.app/",
+    href: "https://image-go.vercel.app/",
     github: "https://github.com/DannyUzo/GalleryTask3",
-    framework: "React & Firebase",
-    name: "Image Gallery",
+    framework: "ReactJs & Unsplash api",
+    name: "ImageGo",
   },
   {
     id: 3,
-    about: "Savor the flavors at my restaurant site. Explore our menu, ambiance, and events. A culinary experience awaits",
-    href: "https://resturantsite.vercel.app/",
-    github: "https://github.com/DannyUzo/DannyUzo.github.io",
-    framework: "HTML, CSS & JS",
-    name: "Restaurant Landing Page",
+    href: "https://nikepage-five.vercel.app/",
+    github: "https://github.com/DannyUzo/Nike",
+    framework: "NextJs & Tailwind",
+    name: "Nike-landing Page"
   },
   {
     id: 4,
-    about: "Organize tasks effortlessly with my todo app. Edit tasks, delete tasks, and stay on top of your daily agenda with simplicity and ease",
-    href: "https://todo-app-danny.vercel.app/",
-    github: "https://github.com/DannyUzo/TodoApp",
-    framework: "React, Vanilla Js & Sass",
-    name: "To-do App",
-  },
-  {
-    id: 5,
-    about: "Build Bridge is a startup that deals in software Products. I designed the landing with next.js and framer motion",
-    href: "https://buildbridge-res.vercel.app/",
-    github: "https://github.com/DannyUzo/buildbridge",
-    framework: "Next.js & Framer motion",
-    name: "Build Bridge",
-  },
+    href: "https://chrome-extension-sand.vercel.app/",
+    github: "https://github.com/DannyUzo/ChromeExtension",
+    framework: "ReactJs",
+    name: "Recording Tool"
+  }
 ];
 
-export const collabProjects = [
-  { 
-    id:1, 
-    about: "Glory center community church",
-    href: "https://main--stupendous-creponne-4862ca.netlify.app/",
-    name: "GCCC",
-   },
-   {
-    id:2,
-    about: "This is a movie search engine with user authenticaion. I developed the frontend while consuming the data from an api endpoint",
-    href: "https://dapm.vercel.app/",
-    name: "DAPM"
-   }
-]
 
 export const Skills = [
   { id: 1, imgUrl: html, label: "Html" },
