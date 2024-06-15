@@ -1,22 +1,23 @@
 import React from "react";
 import { CiGlobe } from "react-icons/ci";
-import { FaCode } from "react-icons/fa";
+import { FaGithub } from "react-icons/fa6";
 
-const ProjectCard = ({ name, href, github, about, framework }) => {
+const ProjectCard = ({ name, href, github, framework }) => {
   return (
     <>
       <div className="ProjectCard">
         <h3>{name}</h3>
-        <p>{about}</p>
         <sub>{framework}</sub>
         <div className="LinkDiv">
           <div className="projectLinks">
-            <CiGlobe />
-            <a href={href}>Visit</a>
+            <a href={href}>
+              <CiGlobe />
+            </a>
           </div>
           <div className="projectLinks">
-            <FaCode />
-            <a href={github}>Get Code</a>
+            <a href={github}>
+              <FaGithub />
+            </a>
           </div>
         </div>
       </div>
@@ -25,22 +26,3 @@ const ProjectCard = ({ name, href, github, about, framework }) => {
 };
 
 export default ProjectCard;
-
-export const Collaborations = ({ name, href, about }) => {
-  return (
-    <>
-      <div className="ProjectCard">
-        <h3>{name}</h3>
-        <p>{about}</p>
-        <div className="LinkDiv">
-          <div className="projectLinks">
-              <CiGlobe />
-            <a href={href}>
-              Visit
-            </a>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
