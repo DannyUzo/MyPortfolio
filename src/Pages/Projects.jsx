@@ -1,8 +1,7 @@
 import React from "react";
 import ProjectCard from "../components/ProjectCard";
-import { Collaborations } from "../components/ProjectCard";
 import { Fade } from "react-awesome-reveal";
-import { projectDetails, collabProjects } from "../constants";
+import { projectDetails } from "../constants";
 
 const Projects = () => {
   return (
@@ -22,14 +21,6 @@ const Projects = () => {
             ))}
           </div>
         </Fade>
-        <strong>Collaborations</strong>
-        <div>
-          <div className="projectBox">
-            {collabProjects.map((project) => (
-              <Collaborations key={project.id} {...project} />
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
