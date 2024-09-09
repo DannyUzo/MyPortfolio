@@ -9,6 +9,7 @@ import firebase from "../Assets/images/firebase.png";
 import github from "../Assets/images/github.png";
 import git from "../Assets/images/git.png";
 import figma from "../Assets/images/figma.png";
+import typescript from "../Assets/images/Typescript.png";
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { IoCallOutline } from "react-icons/io5";
@@ -51,14 +52,15 @@ export const Skills = [
   { id: 1, imgUrl: html, label: "Html" },
   { id: 2, imgUrl: css, label: "Css" },
   { id: 3, imgUrl: js, label: "Javascript" },
-  { id: 4, imgUrl: scss, label: "scss" },
-  { id: 5, imgUrl: react, label: "ReactJs" },
-  { id: 6, imgUrl: tw, label: "Tailwind" },
-  { id: 7, imgUrl: next, label: "NextJs" },
-  { id: 8, imgUrl: git, label: "Git"},
-  { id: 9, imgUrl: firebase, label: "Firebase" },
-  { id: 10, imgUrl: github, label: "Github" },
-  { id: 11, imgUrl: figma, label: "Figma"}
+  { id: 4, imgUrl: typescript, label: "Typescript" },
+  { id: 5, imgUrl: scss, label: "scss" },
+  { id: 6, imgUrl: react, label: "ReactJs" },
+  { id: 7, imgUrl: tw, label: "Tailwind" },
+  { id: 8, imgUrl: next, label: "NextJs" },
+  { id: 9, imgUrl: git, label: "Git"},
+  { id: 10, imgUrl: firebase, label: "Firebase" },
+  { id: 11, imgUrl: github, label: "Github" },
+  { id: 12, imgUrl: figma, label: "Figma"}
 ];
 
 export const ContactInfo = [
