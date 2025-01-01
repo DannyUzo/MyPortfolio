@@ -245,7 +245,7 @@ nav {
   padding: 10px;
   box-sizing: border-box;
   align-items: center;
-  box-shadow: 0.5px 0.5px 3px rgb(13, 88, 227);
+  box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
   justify-content: space-between;
   margin: 0 auto;
 }
@@ -363,7 +363,7 @@ justify-content: center;
 }
 .ProjectCard:hover {
   background-color: rgb(249, 249, 249);
-  border: 1px solid rgb(16, 81, 203);
+  border: 1px solid rgb(13, 166, 227);
 }
 .ProjectImg {
   border-radius: 10px;
@@ -379,7 +379,7 @@ justify-content: center;
   display: block;
 }
 .contactCard {
-  box-shadow: 0.5px 0.5px 3px rgb(13, 88, 227);
+  box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
   border-radius: 10px;
   font-size: 21px;
   padding: 10px;
@@ -411,7 +411,7 @@ form {
   -webkit-gap: 10px;
   box-sizing: border-box;
   border-radius: 6px;
-  box-shadow: 0.5px 0.5px 3px rgb(13, 88, 227);
+  box-shadow: 0.5px 0.5px 3px rgb(13, 166, 227);
 }
 
 .formWrapper {

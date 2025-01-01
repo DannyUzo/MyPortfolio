@@ -18,6 +18,13 @@ import { IoCallOutline } from "react-icons/io5";
 
 export const projectDetails = [
   {
+    id: 0,
+    href: "https://dev-talk-5ge3.vercel.app/",
+    github: "https://github.com/DannyUzo/DevTalk",
+    framework: "NextJs, Firebase & Typescript",
+    name: "DevTalk",
+  },
+  {
     id: 1,
     href: "https://weather-vistaa.vercel.app/",
     github: "https://github.com/DannyUzo/Weather-App",

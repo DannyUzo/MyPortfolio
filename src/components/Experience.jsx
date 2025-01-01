@@ -2,6 +2,14 @@ const Experience = () => {
   return (
     <div className="experience">
       <div className="job">
+    <h3>XplicitMode, Abuja - Frontend Developer</h3>
+    <p className="date">NOV 2024 - PRESENT</p>
+    <ul>
+      <li>Implementing core functionalities and optimizing features</li>
+      <li>Developing user-friendly web interfaces and implementing designs provided by UI/UX teams.</li>
+    </ul>
+      </div>
+      <div className="job">
         <h3>BuildBridge, Abeokuta — Frontend Developer</h3>
         <p className="date">OCT 2023 - PRESENT</p>
         <ul>
@@ -21,7 +29,7 @@ const Experience = () => {
       </div>
       <div className="job">
         <h3>NUTECH, Abeokuta — Frontend Developer Intern</h3>
-        <p className="date">DEC 2023 - PRESENT</p>
+        <p className="date">DEC 2023 - AUG 2024</p>
         <ul>
           <li>Assisting senior developers in frontend development tasks.</li>
           <li>
