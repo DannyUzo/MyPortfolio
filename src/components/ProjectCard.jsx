@@ -10,9 +10,12 @@ const ProjectCard = ({ name, href, github, framework }) => {
         <sub>{framework}</sub>
         <div className="LinkDiv">
           <div className="projectLinks">
-            <a href={href}>
-              <CiGlobe />
-            </a>
+            {href && (
+              <a href={href}>
+                <CiGlobe />
+              </a>
+            )
+            }
           </div>
           <div className="projectLinks">
             <a href={github}>

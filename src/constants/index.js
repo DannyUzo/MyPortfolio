@@ -26,27 +26,33 @@ export const projectDetails = [
   },
   {
     id: 1,
+    github: "https://github.com/DannyUzo/yolov5-web-app",
+    framework: "NextJs, Flask & Yolov5",
+    name: "Yolov5 Web App",
+  },
+  {
+    id: 2,
     href: "https://weather-vistaa.vercel.app/",
     github: "https://github.com/DannyUzo/Weather-App",
     framework: "ReactJs & Css",
     name: "Weather Vista",
   },
   {
-    id: 2,
+    id: 3,
     href: "https://image-go.vercel.app/",
     github: "https://github.com/DannyUzo/GalleryTask3",
     framework: "ReactJs & Unsplash api",
     name: "ImageGo",
   },
   {
-    id: 3,
+    id: 4,
     href: "https://nikepage-five.vercel.app/",
     github: "https://github.com/DannyUzo/Nike",
     framework: "NextJs & Tailwind",
     name: "Nike-landing Page"
   },
   {
-    id: 4,
+    id: 5,
     href: "https://chrome-extension-sand.vercel.app/",
     github: "https://github.com/DannyUzo/ChromeExtension",
     framework: "ReactJs",
