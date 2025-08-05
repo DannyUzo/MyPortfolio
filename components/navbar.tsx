@@ -66,8 +66,8 @@ export function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border"
-          : "bg-background/80 backdrop-blur-sm"
+        ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border"
+        : "bg-background/80 backdrop-blur-sm"
         }`}
     >
       <motion.div
@@ -155,14 +155,17 @@ export function Navbar() {
                 </button>
               ))}
               <div className="flex items-center space-x-4 pt-4 border-t border-border">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Resume
-                </Button>
+                <Link href={"https://drive.google.com/file/d/1dkE5icQbO3gDyPLwd-p6I7Hx6kL6GNLT/view?usp=sharing"}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Resume
+                  </Button>
+                </Link>
+
               </div>
             </div>
           </motion.div>
