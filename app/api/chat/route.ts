@@ -2,203 +2,241 @@ import { type NextRequest, NextResponse } from "next/server"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { resumeData } from "@/lib/resume-data"
 
-// Initialize Gemini AI with error handling
+// Initialize Gemini AI
 let genAI: GoogleGenerativeAI | null = null
 
 try {
   const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    throw new Error("Gemini API key is not configured")
+    throw new Error("GEMINI_API_KEY is not configured in environment variables")
   }
   genAI = new GoogleGenerativeAI(apiKey)
+  console.log("✓ Gemini AI initialized successfully")
 } catch (error) {
-  console.error("Failed to initialize Gemini AI:", error)
+  console.error("✗ Failed to initialize Gemini AI:", error)
 }
+
+// Store chat sessions in memory (keyed by session ID)
+const chatSessions = new Map<string, any>()
 
 class ResumeAIService {
-  private model
-  private resumeContext: string
+  private model: any
+  private systemPrompt: string
 
   constructor() {
-    if (!genAI) {
-      throw new Error("Gemini AI is not properly initialized")
-    }
+    if (!genAI) throw new Error("Gemini AI not initialized");
 
+    // 1. USE THE 2025 STABLE MODEL ID
+    // 2. USE systemInstruction INSTEAD OF SEEDING HISTORY
+    this.model = genAI.getGenerativeModel({
+      model: "gemini-3-flash",
+      systemInstruction: this.buildSystemPrompt(),
+      generationConfig: {
+        temperature: 0.7, // Lower temperature = more consistent persona
+        maxOutputTokens: 800,
+      },
+    });
+
+    this.systemPrompt = this.buildSystemPrompt()
+    console.log("✓ AI model configured successfully")
+  }
+
+  private buildSystemPrompt(): string {
+    return `You are ${resumeData.personalInfo.name}, a ${resumeData.personalInfo.title}. You are being interviewed by a potential employer or recruiter. Speak in first person as if you ARE ${resumeData.personalInfo.name}.
+
+PERSONALITY & TONE:
+- Be confident, friendly, and professional
+- Give concise but informative answers
+- Show enthusiasm about your work and skills
+- Be humble but showcase your competence
+
+PERSONAL INFORMATION:
+Name: ${resumeData.personalInfo.name}
+Title: ${resumeData.personalInfo.title}
+Email: ${resumeData.personalInfo.email}
+Phone: ${resumeData.personalInfo.phone}
+Location: ${resumeData.personalInfo.location}
+Portfolio: ${resumeData.personalInfo.portfolio}
+LinkedIn: ${resumeData.personalInfo.socialMedia.linkedin}
+GitHub: ${resumeData.personalInfo.socialMedia.github}
+
+PROFESSIONAL PROFILE:
+${resumeData.profile}
+
+EXPERIENCE:
+${resumeData.professionalExperience
+        .map((exp) => `• ${exp.position} at ${exp.company} (${exp.duration}) - ${exp.location}
+  ${exp.description}`)
+        .join("\n")}
+
+INTERNSHIPS:
+${resumeData.internships
+        .map((intern) => `• ${intern.position} at ${intern.company} (${intern.duration}) - ${intern.location}
+  ${intern.description}`)
+        .join("\n")}
+
+SKILLS:
+Languages & Frameworks: ${resumeData.skills.languagesAndFrameworks.join(", ")}
+State Management & Data: ${resumeData.skills.stateAndData.join(", ")}
+Styling: ${resumeData.skills.stylingTools.join(", ")}
+Tools & Platforms: ${resumeData.skills.toolsAndPlatforms.join(", ")}
+Soft Skills: ${resumeData.skills.softSkills.join(", ")}
+
+PROJECTS:
+${resumeData.projects
+        .map(
+          (project) => `• ${project.name}: ${project.description}
+  Technologies: ${project.technologies.join(", ")}`
+        )
+        .join("\n")}
+
+CERTIFICATES:
+${resumeData.certificates.map((cert) => `• ${cert.name} - ${cert.issuer}`).join("\n")}
+
+EDUCATION:
+${resumeData.education
+        .map((edu) => `• ${edu.degree} at ${edu.institution} (${edu.duration}) - ${edu.location}`)
+        .join("\n")}
+
+IMPORTANT RULES:
+1. If asked about XplicitMode or your current company, keep it brief unless they specifically ask for details
+2. For non-professional questions, politely redirect: "I'd prefer to focus on discussing my professional qualifications. Is there anything specific about my experience or skills you'd like to know?"
+3. If you don't know something, say: "I don't have that information handy, but feel free to contact me at ${resumeData.personalInfo.email} and I can provide more details."
+4. Never break character - you ARE ${resumeData.personalInfo.name}
+5. Keep responses conversational and natural, not like reading a resume`
+  }
+
+getOrCreateChatSession(sessionId: string) {
+    if (!chatSessions.has(sessionId)) {
+      // With systemInstruction set above, you don't need to seed the history
+      const chat = this.model.startChat({
+        history: [], 
+      });
+      chatSessions.set(sessionId, chat);
+    }
+    return chatSessions.get(sessionId);
+  }
+
+  async askQuestion(question: string, sessionId: string = "default"): Promise<string> {
+    const chat = this.getOrCreateChatSession(sessionId);
+    
+    // Using a try-catch here lets us handle "Safety Blocks" gracefully
     try {
-      this.model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
-      this.resumeContext = this.buildResumeContext()
-    } catch (error) {
-      console.error("Failed to initialize AI model:", error)
-      throw error
+      const result = await chat.sendMessage(question);
+      const response = await result.response;
+      return response.text();
+    } catch (e: any) {
+      if (e.message?.includes("SAFETY")) {
+        return "I can only discuss professional topics related to my resume. How can I help with that?";
+      }
+      throw e;
     }
   }
 
-  private buildResumeContext(): string {
-    try {
-      const context = `
-      You are to act as if you are impersonating ${resumeData.personalInfo.name}. Give concise answers and make sure you convince whoever is asking about his competence and skills. This is for job application purposes.
-      
-      When asked about anything not related to what a potential employer would want to know, be polite, courteous, and friendly, and let them know that you can't answer the question right now. Do not talk too much about my current company. 
-      If you are not asked don't even mention XplicitMode. DO NOT!
-      
-      If you are asked about something you don't know, tell them to contact me directly as you can't give an answer to that currently. Remember, you are impersonating me, so provide my contact information.
-      
-      Personal Information:
-      - Name: ${resumeData.personalInfo.name}
-      - Title: ${resumeData.personalInfo.title}
-      - Email: ${resumeData.personalInfo.email}
-      - Phone: ${resumeData.personalInfo.phone}
-      - Location: ${resumeData.personalInfo.location}
-      - Portfolio: ${resumeData.personalInfo.portfolio}
-      - LinkedIn: ${resumeData.personalInfo.socialMedia.linkedin}
-      - GitHub: ${resumeData.personalInfo.socialMedia.github}
-      
-      Profile: ${resumeData.profile}
-      
-      Professional Experience:
-      ${resumeData.professionalExperience
-        .map((exp) => `- ${exp.position} at ${exp.company} (${exp.duration}) - ${exp.location}: ${exp.description}`)
-        .join("\n")}
-      
-      Internships:
-      ${resumeData.internships
-        .map(
-          (intern) =>
-            `- ${intern.position} at ${intern.company} (${intern.duration}) - ${intern.location}: ${intern.description}`,
-        )
-        .join("\n")}
-      
-      Skills:
-      - Languages & Frameworks: ${resumeData.skills.languagesAndFrameworks.join(", ")}
-      - State & Data: ${resumeData.skills.stateAndData.join(", ")}
-      - Styling Tools: ${resumeData.skills.stylingTools.join(", ")}
-      - Tools & Platforms: ${resumeData.skills.toolsAndPlatforms.join(", ")}
-      - Soft Skills: ${resumeData.skills.softSkills.join(", ")}
-      
-      Projects:
-      ${resumeData.projects
-        .map(
-          (project) => `- ${project.name}: ${project.description} (Technologies: ${project.technologies.join(", ")})`,
-        )
-        .join("\n")}
-      
-      Certificates:
-      ${resumeData.certificates.map((cert) => `- ${cert.name} from ${cert.issuer}`).join("\n")}
-      
-      Education:
-      ${resumeData.education
-        .map((edu) => `- ${edu.degree} at ${edu.institution} (${edu.duration}) - ${edu.location}`)
-        .join("\n")}
-      
-      IMPORTANT: 
-      - You are impersonating me for job interview purposes
-      - Focus on showcasing my competence and skills
-      - For non-professional questions, politely redirect
-      - If you don't know something, direct them to contact me at ${resumeData.personalInfo.email}
-      - Don't mention anything about my resume directly - speak as if you ARE me
-      `
-
-      return context
-    } catch (error) {
-      console.error("Failed to build resume context:", error)
-      throw new Error("Failed to prepare AI context")
-    }
-  }
-
-  async askQuestion(question: string): Promise<string> {
-    try {
-      if (!this.model) {
-        throw new Error("AI model is not initialized")
-      }
-
-      const prompt = `${this.resumeContext}\n\nQuestion: ${question}\n\nAnswer as ${resumeData.personalInfo.name}, staying in character and focusing on professional competence:`
-
-      const result = await this.model.generateContent(prompt)
-      const response = await result.response
-
-      if (!response) {
-        throw new Error("No response received from AI model")
-      }
-
-      const text = response.text()
-      if (!text || text.trim().length === 0) {
-        throw new Error("Empty response from AI model")
-      }
-
-      return text
-    } catch (error) {
-      console.error("Error generating AI response:", error)
-
-      // Return a helpful fallback message
-      return `I'm experiencing some technical difficulties right now. Please feel free to contact me directly at ${resumeData.personalInfo.email} for any questions about my background and experience.`
-    }
+  clearSession(sessionId: string) {
+    chatSessions.delete(sessionId)
+    console.log(`✓ Chat session cleared: ${sessionId}`)
   }
 }
 
+// Initialize service
 let aiService: ResumeAIService | null = null
 
-// Initialize service with error handling
 try {
-  aiService = new ResumeAIService()
+  if (genAI) {
+    aiService = new ResumeAIService()
+  }
 } catch (error) {
-  console.error("Failed to initialize AI service:", error)
+  console.error("✗ Failed to initialize AI service:", error)
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // Validate request
-    if (!request.body) {
-      return NextResponse.json({ error: "Request body is required" }, { status: 400 })
-    }
-
-    const { message, question } = await request.json()
+    const body = await request.json()
+    const { message, question, sessionId } = body
     const userMessage = message || question
 
+    // Validation
     if (!userMessage || typeof userMessage !== "string" || userMessage.trim().length === 0) {
-      return NextResponse.json({ error: "Valid message is required" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Valid message is required" },
+        { status: 400 }
+      )
     }
 
     // Check if AI service is available
     if (!aiService) {
-      return NextResponse.json({
-        response: `The AI chat service is temporarily unavailable. Please contact me directly at ${resumeData.personalInfo.email}.`,
-        answer: `The AI chat service is temporarily unavailable. Please contact me directly at ${resumeData.personalInfo.email}.`
-      })
+      return NextResponse.json(
+        {
+          error: "AI service unavailable",
+          response: `The AI chat is temporarily unavailable. Please contact ${resumeData.personalInfo.name} directly at ${resumeData.personalInfo.email}.`,
+        },
+        { status: 503 }
+      )
     }
 
-    // Rate limiting check (simple implementation)
-    const userAgent = request.headers.get("user-agent") || "unknown"
-    console.log(`Chat request from: ${userAgent}`)
+    // Generate response using chat session
+    const chatSessionId = sessionId || "default"
+    const response = await aiService.askQuestion(userMessage, chatSessionId)
 
-    const response = await aiService.askQuestion(userMessage)
-
-    return NextResponse.json({ 
+    return NextResponse.json({
       response,
-      answer: response // Include both for compatibility
+      answer: response,
+      sessionId: chatSessionId,
     })
-  } catch (error) {
-    console.error("Chat API error:", error)
+  } catch (error: any) {
+    console.error("✗ Chat API error:", error)
 
-    // Return a user-friendly error response
+    // Handle specific Gemini API errors
+    if (error?.message?.includes("API_KEY_INVALID")) {
+      return NextResponse.json(
+        { error: "Invalid API key configuration" },
+        { status: 500 }
+      )
+    }
+
+    if (error?.message?.includes("quota") || error?.message?.includes("rate limit")) {
+      return NextResponse.json(
+        { error: "Rate limit exceeded. Please try again later." },
+        { status: 429 }
+      )
+    }
+
+    // Generic error response
     return NextResponse.json(
       {
-        response: `I'm experiencing technical difficulties. Please try again later or contact me directly at ${resumeData.personalInfo.email}.`,
-        answer: `I'm experiencing technical difficulties. Please try again later or contact me directly at ${resumeData.personalInfo.email}.`
+        error: "Failed to generate response",
+        response: `I'm having trouble responding right now. Please contact ${resumeData.personalInfo.name} at ${resumeData.personalInfo.email}.`,
       },
-      { status: 200 },
-    ) // Return 200 to avoid triggering client-side error handling
+      { status: 500 }
+    )
   }
 }
 
-// Handle unsupported methods
+// Clear chat session endpoint
+export async function DELETE(request: NextRequest) {
+  try {
+    const { sessionId } = await request.json()
+
+    if (aiService && sessionId) {
+      aiService.clearSession(sessionId)
+      return NextResponse.json({ success: true, message: "Session cleared" })
+    }
+
+    return NextResponse.json({ success: false, message: "No session to clear" })
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to clear session" },
+      { status: 500 }
+    )
+  }
+}
+
+// Health check endpoint
 export async function GET() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 })
-}
-
-export async function PUT() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 })
-}
-
-export async function DELETE() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 })
+  return NextResponse.json({
+    status: aiService ? "operational" : "unavailable",
+    model: "gemini-1.5-flash",
+    timestamp: new Date().toISOString(),
+  })
 }

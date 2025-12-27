@@ -2,7 +2,7 @@ import XplicMode from "@/public/images/image.png"
 import Zuri from "@/public/images/zuriLogo.jpeg"
 import Nutec from "@/public/images/nutec.jpg"
 import Nuesa from "@/public/images/nuesa.png"
-
+import Zendfi from "@/public/images/zendfi.png"
 
 
 export const resumeData = {
@@ -22,10 +22,20 @@ export const resumeData = {
     "I'm a frontend engineer passionate about turning complex ideas into clean, responsive, and user-friendly web experiences. With a strong grasp of modern frontend technologies, I build scalable, fast, and functional web applications. Beyond just writing code, I think in terms of product value, focusing on user experience, performance, and maintainability. From integrating real-time features to handling tricky bugs or auth flows, I bring problem-solving and attention to detail. I'm constantly learning, and I love collaborating to ship features that make users happy and businesses grow.",
   professionalExperience: [
     {
+      company: "ZendFi",
+      image: Zendfi,
+      position: "Software Engineer",
+      duration: "11/2025 - Present",
+      location: "Lagos, Nigeria",
+      description:
+        "At ZendFi, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
+      desc: "Worked across product development, SDKs, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
+    },
+    {
       company: "XplicitMode",
       image: XplicMode,
       position: "Frontend Engineer",
-      duration: "11/2024 – present",
+      duration: "11/2024 – 09/2025",
       location: "Abuja, Nigeria",
       description:
         "At XplicitMode, I optimise and maintain fast, scalable, and smooth user interfaces using modern technologies such as Next.js, TypeScript, and Tailwind CSS. I work on client-side queries, payment gateways, user onboarding, and other major user experiences across platforms like AFRUNA (e-commerce) and a freelance service platform, implementing features such as state management with context api and redux, Axios token handling, order management, service listings, real-time messaging, and role-based authentication.",
