@@ -155,7 +155,7 @@ export function Navbar() {
                 </button>
               ))}
               <div className="flex items-center space-x-4 pt-4 border-t border-border">
-                <Link href={"https://drive.google.com/file/d/1dkE5icQbO3gDyPLwd-p6I7Hx6kL6GNLT/view?usp=sharing"}>
+                <Link href={"https://drive.google.com/file/d/1A2gK6JjtI_XlXEXfPxbHFr7KwvJoeUAg/view?usp=drive_link"}>
                   <Button
                     variant="outline"
                     size="sm"
