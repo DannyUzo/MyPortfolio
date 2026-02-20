@@ -1,10 +1,3 @@
-import XplicMode from "@/public/images/image.png"
-import Zuri from "@/public/images/zuriLogo.jpeg"
-import Nutec from "@/public/images/nutec.jpg"
-import Nuesa from "@/public/images/nuesa.png"
-import Zendfi from "@/public/images/zendfi.png"
-
-
 export const resumeData = {
   personalInfo: {
     name: "UZODINMA DANIEL",
@@ -23,7 +16,7 @@ export const resumeData = {
   professionalExperience: [
     {
       company: "ZendFi",
-      image: Zendfi,
+    //   image: Zendfi,
       position: "Software Engineer",
       duration: "11/2025 - Present",
       location: "Lagos, Nigeria",
@@ -33,7 +26,7 @@ export const resumeData = {
     },
     {
       company: "XplicitMode",
-      image: XplicMode,
+    //   image: XplicMode,
       position: "Frontend Engineer",
       duration: "11/2024 – 09/2025",
       location: "Abuja, Nigeria",
@@ -43,7 +36,7 @@ export const resumeData = {
     },
     {
       company: "Nuesa Funaab",
-      image: Nuesa,
+    //   image: Nuesa,
       position: "Lead Frontend Engineer & System Architect",
       duration: "07/2025 (contract)",
       location: "Abeokuta, Nigeria",
@@ -55,7 +48,7 @@ export const resumeData = {
   internships: [
     {
       company: "NUTEC-FUNAAB",
-      image: Nutec,
+    //   image: Nutec,
       position: "Frontend Engineering Intern",
       duration: "2024",
       location: "Abeokuta, Nigeria",
@@ -65,7 +58,7 @@ export const resumeData = {
     },
     {
       company: "Zuri Internship(HNGx)",
-      image: Zuri,
+    //   image: Zuri,
       position: "Frontend Engineering Intern",
       duration: "2023",
       location: "Remote, Nigeria",
@@ -75,15 +68,14 @@ export const resumeData = {
     },
   ],
   skills: {
-    languagesAndFrameworks: ["HTML/CSS3", "JavaScript", "TypeScript", "ReactJs", "NextJs", "VueJs"],
-    stateAndData: ["Zustand", "React Redux", "React Query", "React Context API", "Axois/ Fetch API"],
+    languagesAndFrameworks: ["HTML", "CSS", "JavaScript", "TypeScript", "ReactJs", "NextJs", "VueJs"],
+    stateAndData: ["Zustand", "React Redux", "React Query", "React Context API"],
     softSkills: ["Team collaboration", "Good Communication skills", "Attention to Detail", "Continuous learning"],
     stylingTools: ["TailwindCSS", "SCSS"],
-    toolsAndPlatforms: ["Git", "Firebase & Convex (BaaS)", "Shadcn/ui & Radix UI", "Vercel", "Framer Motion & GSAP (Animations)", "Postman(API Testing)", "Figma (UI Design)"
-    ],
-    mlTools: ["Python", "CNNs", "LangChain/LlamaIndex", "RAG", "FAISS", "Google Colab ", "Jupyter Notebooks", "NumPy/Pandas"],
-    roboticTools: ["Arduino", "ESP32", "Embedded C/C++", "Arduino IDE", "Sensor Integration", "Wireless Protocols", "Circuit Prototyping & Schematics", "Actuators"
-    ],
+    toolsAndPlatforms: ["Git", "Firebase", "Framer-motion", "Shadcn/ui", "Convex","GSAP"],
+    mlTools: ["Python", "CNNs", "LangChain/LlamaIndex", "RAG", "FAISS", "Google Colab ","Jupyter Notebooks","NumPy/Pandas"],
+   roboticTools: ["Arduino","ESP32", "Embedded C/C++", "Arduino IDE", "Sensor Integration", "Wireless Protocols","Circuit Prototyping & Schematics","Actuators"
+],
   },
   projects: [
     {
@@ -146,52 +138,41 @@ export const resumeData = {
   ],
   hardwareProjects: [
     {
-      title: "Smart Home Energy Management System (Course Work)",
-      description: "A multi-branch energy monitoring and control system that tracks real-time power consumption, enforces energy budgets, and responds automatically to human presence.",
+      title: "Autonomous Line Follower",
+      description: "A PID-controlled line following robot with obstacle avoidance capabilities.",
       image: "",
-      stack: ["C++", "Embedded C/C++", "Arduino IDE"],
+      stack: ["C++", "Arduino"],
       link: "",
       github: "https://github.com/DannyUzo/LineFollower",
-      components: ["PZEM-004T v3.0", "Relay Module", "ILI9341 TFT Display", "4×4 Matrix Keypad", "PIR Motion Sensor", "mmWave Radar Sensor", "EEPROM"],
-      microcontrollers: ["Arduino Mega 2560"],
-      firmwareStack: ["C++", "PZEM004Tv30", "Adafruit ILI9341", "Keypad", "SoftwareSerial"],
-      firmwareSlug: "smart-home-energy-management",
+      sensors: ["IR Sensor Array", "Ultrasonic Sensor"],
+      microcontrollers: ["Arduino Nano"],
+      firmwareStack: ["C++", "PID Control"]
     },
     {
-      title: "Fire Suppressor System",
-      description: "A fire suppression system that detects fire and suppresses it using a water pump and then alerts the user.",
+      title: "IoT Weather Station",
+      description: "Solar-powered weather station transmitting data to a cloud dashboard via MQTT.",
       image: "",
-      stack: ["C++", "ESP8266", "IoT", ""],
+      stack: ["C++", "ESP8266", "MQTT", "Node-RED"],
       link: "",
       github: "https://github.com/DannyUzo/IoT-Weather",
-      components: ["Fire Sensor", "Temperature Sensor (DHT11)", "Smoke Sensor (MQ-2)", "Relay Module", "Water Pump", "Indicator Lights"],
+      sensors: ["BME280", "Rain Sensor"],
       microcontrollers: ["ESP8266"],
-      firmwareStack: ["C++", "Arduino IoT Cloud"],
-      firmwareSlug: "fire-suppressor-system",
+      firmwareStack: ["C++", "Arduino IoT Cloud"]
     }
   ],
   aiProjects: [
     {
       title: "Building RAG Agents with LLMs",
-      description: "This project involved building a RAG system using LangChain and FAISS to answer questions about a given context using LLM as a judge.",
+      description: "Fine-tuned BERT model for analyzing product review sentiment.",
       stack: ["Python", "LangChain", "FAISS", "Gradio", "Nvidia Models"],
       link: "",
-      github: "https://github.com/DannyUzo/Building-RAG-Agents-with-LLMs",
+      github: "https://github.com/DannyUzo/bert-sentiment",
       modelType: "RAG",
       researchInterests: ["RAG", "LLMs", "Embeddings", "Chunking", "FAISS"]
     },
     {
-      title: "Fundamentals of Deep Learning",
-      description: "This project involved building, training, and fine-tuning a Convolutional Neural Network (CNN) to classify images of fruit as either fresh or rotten.",
-      stack: ["Python", "Kaggle", "TorchVision", "CNNs", "Data Augmentation", "Model Fine-tuning"],
-      link: "",
-      github: "https://github.com/DannyUzo/Fundamentals-of-DeepLearning",
-      modelType: "CNN",
-      researchInterests: ["CNNs", "Data Augmentation", "Model Fine-tuning", "Transfer Learning"]
-    },
-    {
       title: "YOLOv5 Object Detection",
-      description: "Real-time object detection web app using YOLOv5 and Flask. Imported pre-trained YOLOv5 model and fine-tuned it for object detection.",
+      description: "Real-time object detection web app using YOLOv5 and Flask.",
       stack: ["Python", "PyTorch", "Flask", "React"],
       link: "",
       github: "https://github.com/DannyUzo/yolov5-web-app",

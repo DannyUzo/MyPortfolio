@@ -1,0 +1,565 @@
+---
+title: "Building a Smart Home Energy Management System with Arduino Mega"
+author: "Daniel Uzodinma"
+date: "2025-11-15"
+description: "A deep dive into a multi-branch energy monitoring and control system using the Arduino Mega, PZEM-004T sensors, relay modules, a TFT display, and presence detection — built as a university course project."
+tags: ["Arduino", "IoT", "Embedded C++", "Energy Management", "Home Automation"]
+---
+
+# Smart Home Energy Management System
+
+Managing electricity consumption in a smart home isn't just about convenience — it's about awareness, safety, and efficiency. This project implements a **multi-branch energy monitoring and control system** that tracks real-time power consumption across three circuit branches, enforces energy budgets, and automatically responds to human presence.
+
+Built on the **Arduino Mega** as a course work project, this system combines energy metering, relay control, a keypad interface, a TFT color display, and dual-sensor presence detection into a single cohesive firmware.
+
+---
+
+## 🛠 Hardware Components
+
+- **Arduino Mega 2560** — The main microcontroller, chosen for its large number of hardware serial ports.
+- **PZEM-004T v3.0 (×3)** — Energy metering module that measures voltage, current, and power per branch.
+- **4×4 Matrix Keypad** — User input for entering and confirming energy unit allocations.
+- **Relay Module (×3)** — Controls power to each of the three circuit branches.
+- **ILI9341 TFT Display (2.8")** — 320×240 color display for real-time live readings.
+- **PIR Motion Sensor** — Detects occupancy via passive infrared.
+- **mmWave Radar Sensor** — Secondary presence detection for improved reliability.
+- **EEPROM (built-in)** — Persists energy allocation and remaining units across power cycles.
+
+---
+
+## 💻 Software & Libraries
+
+The firmware is written in **C++** using the Arduino IDE. Install the following libraries via Arduino Library Manager:
+
+1. **Keypad.h** — Matrix keypad interfacing
+2. **SoftwareSerial.h** — Emulates serial ports for PZEM modules (built-in)
+3. **PZEM004Tv30.h** — Driver for the PZEM-004T v3.0 energy meter
+4. **Adafruit_GFX.h** — Graphics primitives for the display
+5. **Adafruit_ILI9341.h** — Hardware driver for the ILI9341 TFT panel
+6. **SPI.h** — SPI bus communication (built-in)
+7. **EEPROM.h** — Non-volatile storage (built-in)
+
+---
+
+## ⚙️ How It Works: The Logic
+
+### Energy Allocation & Weighted Distribution
+
+When the user enters a total `kWh` budget via the keypad, the system distributes it across the 3 branches based on their **maximum current ratings**:
+
+| Branch | Max Current | Weight |
+| --- | --- | --- |
+| Branch 1 | 16A | ~51.6% |
+| Branch 2 | 10A | ~32.3% |
+| Branch 3 | 5A | ~16.1% |
+
+This proportional allocation ensures heavier circuits get more budget, mirroring real-world electrical demand.
+
+### Presence-Aware Relay Control
+
+The system combines readings from a **PIR sensor** and an **mmWave radar sensor**. If neither detects occupancy, all relays are switched off — cutting power to all branches to prevent wasteful consumption. When presence returns, relays re-enable for branches that still have remaining allocation.
+
+### Per-Branch Energy Deduction
+
+Every second, the system reads live voltage and current from each PZEM module, calculates instantaneous power (`P = V × I`), and deducts the consumed energy (`kWh = P / 3600 / 1000`) from each branch's remaining budget. When a branch hits zero, its relay is cut and the user is notified.
+
+### EEPROM Persistence
+
+To survive power cuts, all energy data is saved to EEPROM every **5 minutes** (or immediately when a branch hits its limit). On boot, the system restores from EEPROM so no allocation data is lost.
+
+---
+
+## 📟 Display & User Interface
+
+The **ILI9341 TFT** provides a live dashboard:
+- **Header** — System name and version
+- **Branch Boxes (B1, B2, B3)** — Show live voltage, current, power, consumed kWh, and remaining kWh, with a **green border** (active) or **red border** (depleted/off)
+- **Status Bar** — Relay states and presence detection status
+- **Keypad Input Line** — Shows digits as the user types a new allocation
+
+The **4×4 keypad** handles all input:
+
+| Key | Action |
+| --- | --- |
+| `0–9` | Enter unit digits |
+| `#` | Confirm allocation |
+| `*` | Clear input |
+| `D` | Full system reset |
+
+---
+
+## 📜 The Complete Firmware
+
+```cpp
+#include <Keypad.h>
+#include <SoftwareSerial.h>
+#include <PZEM004Tv30.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ILI9341.h>
+#include <SPI.h>
+#include <EEPROM.h>
+
+/* ---------- COLORS ---------- */
+#define BLACK   ILI9341_BLACK
+#define WHITE   ILI9341_WHITE
+#define RED     ILI9341_RED
+#define GREEN   ILI9341_GREEN
+#define BLUE    ILI9341_BLUE
+#define CYAN    ILI9341_CYAN
+#define YELLOW  ILI9341_YELLOW
+#define MAGENTA ILI9341_MAGENTA
+#define ORANGE  0xFD20
+
+/* ---------- RELAY CONTROL (NORMALLY OPEN) ---------- */
+#define RELAY_ON  LOW
+#define RELAY_OFF HIGH
+
+/* ---------- EEPROM ADDRESSES ---------- */
+#define EEPROM_REMAINING1  0   // 4 bytes
+#define EEPROM_REMAINING2  4   // 4 bytes
+#define EEPROM_REMAINING3  8   // 4 bytes
+#define EEPROM_TOTAL      12   // 4 bytes
+#define EEPROM_INIT       16   // 1 byte (flag)
+#define EEPROM_SAVE_COUNT 17   // 4 bytes (write counter)
+
+/* ---------- RELAYS ---------- */
+const uint8_t RELAY_B1 = 2;
+const uint8_t RELAY_B2 = 8;
+const uint8_t RELAY_B3 = 9;
+
+/* ---------- SENSORS ---------- */
+const int PIN_PIR    = 3;
+const int PIN_MMWAVE = 12;
+
+/* ---------- KEYPAD ---------- */
+const byte ROWS = 4;
+const byte COLS = 4;
+
+char keys[ROWS][COLS] = {
+  { 'D','C','B','A' },
+  { '#','9','6','3' },
+  { '0','8','5','2' },
+  { '*','7','4','1' }
+};
+
+byte rowPins[ROWS] = { A0, A1, A2, A3 };
+byte colPins[COLS] = { 15, 16, 17, 18 };
+Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
+
+/* ---------- PZEM MODULES ---------- */
+SoftwareSerial pzemSerial1(12, 13);
+SoftwareSerial pzemSerial2(10, 11);
+SoftwareSerial pzemSerial3(6, 7);
+
+PZEM004Tv30 pzemB1(pzemSerial1);
+PZEM004Tv30 pzemB2(pzemSerial2);
+PZEM004Tv30 pzemB3(pzemSerial3);
+
+/* ---------- TFT DISPLAY ---------- */
+#define TFT_CS  53
+#define TFT_DC  49
+#define TFT_RST 48
+Adafruit_ILI9341 tft(TFT_CS, TFT_DC, TFT_RST);
+
+/* ---------- ENERGY ALLOCATION ---------- */
+float UnitsTotal = 0;
+float remaining1 = 0, remaining2 = 0, remaining3 = 0;
+bool branchEnabled[3] = { false, false, false };
+bool systemReady = false;
+
+const float Vnom = 230.0;
+const float I1 = 16.0, I2 = 10.0, I3 = 5.0;
+float Pmax1, Pmax2, Pmax3, sumPmax;
+float w1, w2, w3;
+
+/* ---------- TIMING ---------- */
+unsigned long lastEnergyCalc  = 0;
+unsigned long lastEEPROMSave  = 0;
+unsigned long lastSerialPrint = 0;
+unsigned long keypadTimeout   = 0;
+
+const unsigned long ENERGY_CALC_INTERVAL = 1000;
+const unsigned long EEPROM_SAVE_INTERVAL = 300000; // 5 minutes
+const unsigned long SERIAL_INTERVAL      = 2000;
+const unsigned long KP_TIMEOUT           = 5000;
+
+float power1 = 0, power2 = 0, power3 = 0;
+float voltage1 = 0, voltage2 = 0, voltage3 = 0;
+float current1 = 0, current2 = 0, current3 = 0;
+
+String buffer = "";
+bool dataChanged    = false;
+bool presenceDetected   = false;
+bool lastPresenceState  = false;
+
+/* ============================================================
+   SETUP
+   ============================================================ */
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+
+  pinMode(TFT_CS, OUTPUT);
+  digitalWrite(TFT_CS, HIGH);
+
+  pinMode(RELAY_B1, OUTPUT);
+  pinMode(RELAY_B2, OUTPUT);
+  pinMode(RELAY_B3, OUTPUT);
+  pinMode(PIN_PIR, INPUT_PULLUP);
+  pinMode(PIN_MMWAVE, INPUT);
+
+  digitalWrite(RELAY_B1, RELAY_OFF);
+  digitalWrite(RELAY_B2, RELAY_OFF);
+  digitalWrite(RELAY_B3, RELAY_OFF);
+
+  // Calculate power ratings and proportional weights
+  Pmax1 = Vnom * I1;
+  Pmax2 = Vnom * I2;
+  Pmax3 = Vnom * I3;
+  sumPmax = Pmax1 + Pmax2 + Pmax3;
+  w1 = Pmax1 / sumPmax;
+  w2 = Pmax2 / sumPmax;
+  w3 = Pmax3 / sumPmax;
+
+  tft.begin();
+  tft.setRotation(1);
+  tft.fillScreen(BLACK);
+  drawHeader();
+
+  loadFromEEPROM();
+
+  presenceDetected  = !digitalRead(PIN_PIR) || digitalRead(PIN_MMWAVE);
+  lastPresenceState = presenceDetected;
+
+  if (UnitsTotal <= 0) {
+    systemReady = false;
+    drawPromptForUnits();
+  } else {
+    systemReady = true;
+    if (presenceDetected) {
+      if (remaining1 > 0) { digitalWrite(RELAY_B1, RELAY_ON); branchEnabled[0] = true; }
+      if (remaining2 > 0) { digitalWrite(RELAY_B2, RELAY_ON); branchEnabled[1] = true; }
+      if (remaining3 > 0) { digitalWrite(RELAY_B3, RELAY_ON); branchEnabled[2] = true; }
+    }
+    updateDisplay();
+  }
+}
+
+/* ============================================================
+   MAIN LOOP
+   ============================================================ */
+void loop() {
+  handleKeypadInput();
+
+  if (systemReady) {
+    handlePresence();
+
+    if (millis() - lastEnergyCalc >= ENERGY_CALC_INTERVAL) {
+      lastEnergyCalc = millis();
+      calculateAndDeductEnergy();
+      checkConsumptionLimits();
+      dataChanged = true;
+      updateDisplay();
+    }
+
+    if (dataChanged && (millis() - lastEEPROMSave >= EEPROM_SAVE_INTERVAL)) {
+      lastEEPROMSave = millis();
+      saveToEEPROM();
+      dataChanged = false;
+    }
+
+    if (millis() - lastSerialPrint >= SERIAL_INTERVAL) {
+      lastSerialPrint = millis();
+      printSerialData();
+    }
+  }
+}
+
+/* ============================================================
+   EEPROM
+   ============================================================ */
+void saveToEEPROM() {
+  EEPROM.put(EEPROM_REMAINING1, remaining1);
+  EEPROM.put(EEPROM_REMAINING2, remaining2);
+  EEPROM.put(EEPROM_REMAINING3, remaining3);
+  EEPROM.put(EEPROM_TOTAL, UnitsTotal);
+  EEPROM.write(EEPROM_INIT, 1);
+  uint32_t saveCount = 0;
+  EEPROM.get(EEPROM_SAVE_COUNT, saveCount);
+  EEPROM.put(EEPROM_SAVE_COUNT, ++saveCount);
+}
+
+void loadFromEEPROM() {
+  if (EEPROM.read(EEPROM_INIT) == 1) {
+    EEPROM.get(EEPROM_REMAINING1, remaining1);
+    EEPROM.get(EEPROM_REMAINING2, remaining2);
+    EEPROM.get(EEPROM_REMAINING3, remaining3);
+    EEPROM.get(EEPROM_TOTAL, UnitsTotal);
+    if (isnan(remaining1) || remaining1 < 0) remaining1 = 0;
+    if (isnan(remaining2) || remaining2 < 0) remaining2 = 0;
+    if (isnan(remaining3) || remaining3 < 0) remaining3 = 0;
+    if (isnan(UnitsTotal) || UnitsTotal < 0) UnitsTotal = 0;
+  } else {
+    UnitsTotal = remaining1 = remaining2 = remaining3 = 0;
+  }
+}
+
+void clearEEPROM() {
+  for (int i = 0; i < 64; i++) EEPROM.write(i, 0);
+}
+
+/* ============================================================
+   ENERGY METERING
+   ============================================================ */
+void calculateAndDeductEnergy() {
+  pzemSerial1.listen(); delay(50);
+  voltage1 = pzemB1.voltage(); delay(10);
+  current1 = pzemB1.current();
+
+  pzemSerial2.listen(); delay(50);
+  voltage2 = pzemB2.voltage(); delay(10);
+  current2 = pzemB2.current();
+
+  pzemSerial3.listen(); delay(50);
+  voltage3 = pzemB3.voltage(); delay(10);
+  current3 = pzemB3.current();
+
+  // Range validation
+  if (isnan(voltage1) || voltage1 < 180 || voltage1 > 260) voltage1 = 0;
+  if (isnan(current1) || current1 < 0 || current1 > 20)    current1 = 0;
+  if (isnan(voltage2) || voltage2 < 180 || voltage2 > 260) voltage2 = 0;
+  if (isnan(current2) || current2 < 0 || current2 > 15)    current2 = 0;
+  if (isnan(voltage3) || voltage3 < 180 || voltage3 > 260) voltage3 = 0;
+  if (isnan(current3) || current3 < 0 || current3 > 10)    current3 = 0;
+
+  power1 = voltage1 * current1;
+  power2 = voltage2 * current2;
+  power3 = voltage3 * current3;
+
+  if (branchEnabled[0] && power1 > 0.5) {
+    remaining1 -= (power1 / 3600.0) / 1000.0;
+    if (remaining1 < 0) remaining1 = 0;
+  }
+  if (branchEnabled[1] && power2 > 0.5) {
+    remaining2 -= (power2 / 3600.0) / 1000.0;
+    if (remaining2 < 0) remaining2 = 0;
+  }
+  if (branchEnabled[2] && power3 > 0.5) {
+    remaining3 -= (power3 / 3600.0) / 1000.0;
+    if (remaining3 < 0) remaining3 = 0;
+  }
+}
+
+void checkConsumptionLimits() {
+  if (remaining1 <= 0 && branchEnabled[0]) {
+    digitalWrite(RELAY_B1, RELAY_OFF);
+    branchEnabled[0] = false;
+    saveToEEPROM();
+  }
+  if (remaining2 <= 0 && branchEnabled[1]) {
+    digitalWrite(RELAY_B2, RELAY_OFF);
+    branchEnabled[1] = false;
+    saveToEEPROM();
+  }
+  if (remaining3 <= 0 && branchEnabled[2]) {
+    digitalWrite(RELAY_B3, RELAY_OFF);
+    branchEnabled[2] = false;
+    saveToEEPROM();
+  }
+}
+
+/* ============================================================
+   PRESENCE DETECTION
+   ============================================================ */
+void handlePresence() {
+  presenceDetected = !digitalRead(PIN_PIR) || digitalRead(PIN_MMWAVE);
+
+  if (presenceDetected != lastPresenceState) {
+    if (!presenceDetected) {
+      digitalWrite(RELAY_B1, RELAY_OFF);
+      digitalWrite(RELAY_B2, RELAY_OFF);
+      digitalWrite(RELAY_B3, RELAY_OFF);
+      branchEnabled[0] = branchEnabled[1] = branchEnabled[2] = false;
+      saveToEEPROM();
+    } else {
+      if (remaining1 > 0) { digitalWrite(RELAY_B1, RELAY_ON); branchEnabled[0] = true; }
+      if (remaining2 > 0) { digitalWrite(RELAY_B2, RELAY_ON); branchEnabled[1] = true; }
+      if (remaining3 > 0) { digitalWrite(RELAY_B3, RELAY_ON); branchEnabled[2] = true; }
+    }
+    lastPresenceState = presenceDetected;
+    updateDisplay();
+  }
+}
+
+/* ============================================================
+   KEYPAD
+   ============================================================ */
+void handleKeypadInput() {
+  char k = keypad.getKey();
+  if (!k) {
+    if (buffer.length() > 0 && millis() - keypadTimeout > KP_TIMEOUT) {
+      buffer = "";
+      systemReady ? updateDisplay() : drawUnitsInput();
+    }
+    return;
+  }
+
+  if (k >= '0' && k <= '9') {
+    buffer += k;
+    keypadTimeout = millis();
+    systemReady ? updateDisplay() : drawUnitsInput();
+  } else if (k == '#' && buffer.length() > 0) {
+    float newUnits = buffer.toFloat();
+    if (newUnits > 0 && newUnits < 10000) {
+      UnitsTotal = newUnits;
+      allocateUnits(UnitsTotal);
+      buffer = "";
+      systemReady = true;
+      saveToEEPROM();
+      updateDisplay();
+    } else {
+      buffer = "";
+    }
+  } else if (k == '*') {
+    buffer = "";
+    systemReady ? updateDisplay() : drawUnitsInput();
+  } else if (k == 'D') {
+    saveToEEPROM();
+    UnitsTotal = remaining1 = remaining2 = remaining3 = 0;
+    systemReady = false;
+    digitalWrite(RELAY_B1, RELAY_OFF);
+    digitalWrite(RELAY_B2, RELAY_OFF);
+    digitalWrite(RELAY_B3, RELAY_OFF);
+    branchEnabled[0] = branchEnabled[1] = branchEnabled[2] = false;
+    clearEEPROM();
+    drawPromptForUnits();
+  }
+}
+
+/* ============================================================
+   UNIT ALLOCATION
+   ============================================================ */
+void allocateUnits(float u) {
+  float a1 = round(u * w1 * 1000) / 1000.0;
+  float a2 = round(u * w2 * 1000) / 1000.0;
+  float a3 = u - a1 - a2; // remainder goes to branch 3
+
+  remaining1 = a1;
+  remaining2 = a2;
+  remaining3 = a3;
+
+  if (presenceDetected) {
+    digitalWrite(RELAY_B1, RELAY_ON);
+    digitalWrite(RELAY_B2, RELAY_ON);
+    digitalWrite(RELAY_B3, RELAY_ON);
+    branchEnabled[0] = branchEnabled[1] = branchEnabled[2] = true;
+  }
+}
+
+/* ============================================================
+   SERIAL OUTPUT
+   ============================================================ */
+void printSerialData() {
+  Serial.println("\n========== REAL-TIME MONITORING ==========");
+  Serial.print("Total: "); Serial.print(UnitsTotal, 3); Serial.println(" kWh");
+  Serial.print("Presence: "); Serial.println(presenceDetected ? "YES" : "NO");
+  Serial.println("------------------------------------------");
+  for (int b = 1; b <= 3; b++) {
+    float v = (b==1)?voltage1:(b==2)?voltage2:voltage3;
+    float i = (b==1)?current1:(b==2)?current2:current3;
+    float p = (b==1)?power1:(b==2)?power2:power3;
+    float r = (b==1)?remaining1:(b==2)?remaining2:remaining3;
+    bool  e = branchEnabled[b-1];
+    Serial.print("B"); Serial.print(b);
+    Serial.print(" | V:"); Serial.print(v,1);
+    Serial.print(" I:"); Serial.print(i,3);
+    Serial.print(" P:"); Serial.print(p,1);
+    Serial.print(" R:"); Serial.print(r,4);
+    Serial.println(e ? " [ON]" : " [OFF]");
+  }
+  Serial.println("==========================================\n");
+}
+
+/* ============================================================
+   TFT DISPLAY
+   ============================================================ */
+void drawHeader() {
+  tft.fillRect(0, 0, 320, 30, BLUE);
+  tft.setTextColor(WHITE); tft.setTextSize(2);
+  tft.setCursor(20, 7);
+  tft.print("Energy Monitor v2.0");
+}
+
+void drawPromptForUnits() {
+  tft.fillScreen(BLACK);
+  drawHeader();
+  tft.setCursor(40, 60);  tft.setTextColor(RED);    tft.setTextSize(3); tft.print("NO UNITS!");
+  tft.setCursor(10, 100); tft.setTextColor(YELLOW);  tft.setTextSize(2); tft.print("Enter Units via Keypad");
+  tft.setCursor(10, 130); tft.setTextColor(WHITE);   tft.setTextSize(1);
+  tft.print("# = Confirm   * = Clear   D = Reset");
+  drawUnitsInput();
+}
+
+void drawUnitsInput() {
+  tft.fillRect(0, 200, 320, 40, BLACK);
+  tft.setCursor(10, 205); tft.setTextColor(YELLOW); tft.setTextSize(2);
+  tft.print("Input: "); tft.print(buffer); tft.print("_");
+}
+
+void drawBranchBox(int x, int y, const char* label, int branch, float rem, bool en) {
+  float v = (branch==1)?voltage1:(branch==2)?voltage2:voltage3;
+  float i = (branch==1)?current1:(branch==2)?current2:current3;
+  float p = (branch==1)?power1:(branch==2)?power2:power3;
+  float w = (branch==1)?w1:(branch==2)?w2:w3;
+  float consumed = (UnitsTotal * w) - rem;
+
+  uint16_t col = en ? GREEN : RED;
+  tft.drawRect(x, y, 100, 95, col);
+  tft.drawRect(x+1, y+1, 98, 93, col);
+
+  tft.setCursor(x+5, y+5);  tft.setTextSize(2); tft.setTextColor(col);   tft.print(label);
+  tft.setTextSize(1);        tft.setTextColor(WHITE);
+  tft.setCursor(x+5, y+25); tft.print("V:");   tft.print(v, 1); tft.print("V");
+  tft.setCursor(x+5, y+38); tft.print("I:");   tft.print(i, 2); tft.print("A");
+  tft.setCursor(x+5, y+51); tft.print("P:");   tft.print(p, 1); tft.print("W");
+  tft.setCursor(x+5, y+64); tft.print("C:");   tft.print(consumed, 3);
+  tft.setCursor(x+5, y+77); tft.print("R:");   tft.print(rem, 3);
+}
+
+void updateDisplay() {
+  if (!systemReady) return;
+  tft.fillRect(0, 35, 320, 205, BLACK);
+
+  tft.setCursor(10, 40); tft.setTextColor(CYAN); tft.setTextSize(2);
+  tft.print("Total: "); tft.print(UnitsTotal, 2); tft.print(" kWh");
+
+  drawBranchBox(10,  65, "B1", 1, remaining1, branchEnabled[0]);
+  drawBranchBox(115, 65, "B2", 2, remaining2, branchEnabled[1]);
+  drawBranchBox(220, 65, "B3", 3, remaining3, branchEnabled[2]);
+
+  tft.setCursor(10, 170); tft.setTextSize(1); tft.setTextColor(YELLOW);
+  tft.print(branchEnabled[0]?"B1:ON ":"B1:OFF ");
+  tft.print(branchEnabled[1]?"B2:ON ":"B2:OFF ");
+  tft.print(branchEnabled[2]?"B3:ON":"B3:OFF");
+
+  tft.setCursor(10, 185); tft.setTextColor(presenceDetected ? GREEN : RED);
+  tft.print("Presence: "); tft.print(presenceDetected ? "DETECTED" : "NONE");
+
+  tft.setCursor(10, 200); tft.setTextColor(CYAN);
+  tft.print("Remaining: "); tft.print(remaining1+remaining2+remaining3, 3); tft.print(" kWh");
+}
+```
+
+---
+
+## 🚀 Key Design Decisions
+
+1. **Weighted Allocation**: Energy is not split equally. It's distributed proportionally to each branch's maximum power rating — this mirrors how real electrical panels are designed.
+
+2. **EEPROM Write Protection**: Data is only written to EEPROM every 5 minutes (or on critical events like a relay cut). The Arduino Mega's EEPROM is rated for ~100,000 write cycles — saving too often would degrade it prematurely.
+
+3. **Dual Presence Sensing**: A single PIR sensor can miss stationary occupants. Adding the mmWave radar as a secondary sensor creates a logical OR condition, improving reliability in real rooms.
+
+4. **Floating-Point Validation**: PZEM sensors can return `NaN` or wildly out-of-range values on startup or disconnection. Each reading is validated before use to prevent corrupt energy calculations.
+
+5. **Relay Logic Clarity**: `RELAY_ON = LOW` and `RELAY_OFF = HIGH` is defined at the top to make the intent of every relay command clear, regardless of the hardware's active-low behaviour.

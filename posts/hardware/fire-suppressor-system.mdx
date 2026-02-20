@@ -1,0 +1,219 @@
+---
+title: "Building an IoT-Based Fire & Gas Safety System with ESP32 and Telegram"
+author: "Daniel Uzodinma"
+date: "2025-05-02"
+description: "A deep dive into building a real-time fire and gas hazard monitoring system using the ESP32 microcontroller, with instant Telegram alerts and automated suppression."
+tags: ["ESP32", "IoT", "Home Automation", "Safety"]
+---
+
+# Smart Safety: Monitoring Fire and Gas with ESP32
+
+In the world of DIY electronics, few projects are as practical and rewarding as a home safety monitor. Whether it's a gas leak in the kitchen or an unexpected temperature spike, early detection saves lives.
+
+Today, we are diving into a project that uses the **ESP32** to monitor environmental hazards and send real-time alerts directly to your phone via **Telegram**.
+
+---
+
+## 🛠 Hardware Components
+
+To build this system, you'll need the following hardware:
+
+
+- **ESP32 Microcontroller** - The "brain" with built-in Wi-Fi. 
+- **MQ-2 Gas Sensor** - Detects smoke, LPG, and flammable gases. 
+- **Flame/Fire Sensor** - Detects IR light emitted by fire. 
+- **DHT11 Sensor** - Measures ambient temperature and humidity. 
+- **Relay Module** - Controls a high-voltage device (like a water pump). 
+- **Buzzer & LEDs** - Local visual and audible alarms. 
+
+---
+
+## 💻 Software & Libraries
+
+The system is written in C++ using the Arduino IDE framework. To compile the code, you'll need to install these libraries:
+
+1. **WiFi.h**: Handles the connection to your local internet.
+2. **HTTPClient.h**: Used to make requests to the Telegram API.
+3. **DHT.h**: Specifically designed to interface with the DHT11/22 temperature sensors.
+
+---
+
+## ⚙️ How It Works: The Logic
+
+The system operates on a continuous loop, checking three main environmental factors:
+
+### 1. Gas/Smoke Detection
+
+The **MQ-2 sensor** provides an analog value. If the value exceeds `330` (the defined threshold), the blue LED lights up, the buzzer sounds, and a Telegram notification is sent.
+
+### 2. Temperature Monitoring
+
+The **DHT11** tracks the room temperature. If it crosses `35.0°C`, the yellow LED warns the user of potential overheating.
+
+### 3. Fire Response & Mitigation
+
+This is the most critical part. When the **Flame Sensor** detects fire (indicated by a `LOW` state):
+
+* A Red LED and the Buzzer turn on immediately.
+* The **Relay** triggers a water pump to extinguish the fire.
+* An emergency Telegram alert is dispatched.
+
+---
+
+## 📜 The Complete Code
+
+Below is the implementation. Make sure to replace `ssid`, `password`, `Bot token`, and `chatId` with your actual credentials.
+
+```cpp
+#include <WiFi.h>
+#include <HTTPClient.h>
+#include "DHT.h"
+
+// === PIN CONFIGURATION ===
+#define MQ2_PIN          34  // Gas sensor analog
+#define FIRE_SENSOR_PIN  35  // Fire sensor digital
+#define LEDRED_PIN       18
+#define LEDBLUE_PIN      2
+#define LEDGREEN_PIN     4
+#define LEDYELLOW_PIN    23
+#define BUZZER_PIN       27
+#define DHTPIN           33
+#define DHTTYPE          DHT11
+#define RELAY_PIN        14  // Relay controlling water pump
+
+DHT dht(DHTPIN, DHTTYPE);
+
+// === THRESHOLDS ===
+#define GAS_THRESHOLD    330
+#define TEMP_THRESHOLD   35.0
+
+// === WiFi & Telegram Info ===
+const char* ssid = "your_SSID";
+const char* password = "your_PASSWORD";
+String BOT_TOKEN = "your_BOT_TOKEN";
+String CHAT_ID = "your_CHAT_ID";
+
+// === State Management Flags ===
+bool gasAlertSent = false;
+bool tempAlertSent = false;
+bool fireAlertSent = false;
+
+void connectWiFi() {
+  WiFi.begin(ssid, password);
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\n✅ WiFi connected!");
+}
+
+void sendTelegramAlert(String msg) {
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    // Constructing the Telegram Bot API URL
+    String url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage?chat_id=" + CHAT_ID + "&text=" + msg;
+    http.begin(url);
+    int httpCode = http.GET();
+    if (httpCode > 0) Serial.println("✅ Telegram alert sent!");
+    else Serial.println("❌ Error sending Telegram message.");
+    http.end();
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  delay(2000);
+  dht.begin();
+  connectWiFi();
+  analogReadResolution(10); // Standardize analog range
+
+  pinMode(MQ2_PIN, INPUT);
+  pinMode(FIRE_SENSOR_PIN, INPUT);
+  pinMode(LEDRED_PIN, OUTPUT);
+  pinMode(LEDBLUE_PIN, OUTPUT);
+  pinMode(LEDGREEN_PIN, OUTPUT);
+  pinMode(LEDYELLOW_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
+
+  // Initial State: Safe Mode
+  digitalWrite(LEDRED_PIN, LOW);
+  digitalWrite(LEDBLUE_PIN, LOW);
+  digitalWrite(LEDGREEN_PIN, HIGH); // Green ON means everything is OK
+  digitalWrite(LEDYELLOW_PIN, LOW);
+  digitalWrite(BUZZER_PIN, LOW);
+  digitalWrite(RELAY_PIN, HIGH);    // Relay is usually Active LOW, so HIGH = OFF
+}
+
+void loop() {
+  int gasValue = analogRead(MQ2_PIN);
+  int fireState = digitalRead(FIRE_SENSOR_PIN);
+  float temp = dht.readTemperature();
+
+  // Basic Error Handling for Sensor
+  if (isnan(temp)) {
+    Serial.println("❌ Failed to read from DHT sensor!");
+    temp = 0;
+  }
+
+  // --- 1. GAS DETECTION LOGIC ---
+  if (gasValue > GAS_THRESHOLD) {
+    digitalWrite(LEDBLUE_PIN, HIGH);
+    digitalWrite(LEDGREEN_PIN, LOW);
+    digitalWrite(BUZZER_PIN, HIGH);
+    if (!gasAlertSent) {
+      sendTelegramAlert("🚨 Gas/Smoke Detected! Value: " + String(gasValue));
+      gasAlertSent = true;
+    }
+  } else {
+    gasAlertSent = false;
+    digitalWrite(LEDBLUE_PIN, LOW);
+  }
+
+  // --- 2. TEMPERATURE LOGIC ---
+  if (temp >= TEMP_THRESHOLD) {
+    digitalWrite(LEDYELLOW_PIN, HIGH);
+    if (!tempAlertSent) {
+      sendTelegramAlert("🌡️ High Temp! Temp: " + String(temp) + "°C");
+      tempAlertSent = true;
+    }
+  } else {
+    tempAlertSent = false;
+    digitalWrite(LEDYELLOW_PIN, LOW);
+  }
+
+  // --- 3. FIRE DETECTION LOGIC ---
+  if (fireState == LOW) { 
+    digitalWrite(LEDRED_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, HIGH);
+    digitalWrite(RELAY_PIN, LOW); // Trigger Pump
+    if (!fireAlertSent) {
+      sendTelegramAlert("🔥 FIRE DETECTED! Water Pump Activated!");
+      fireAlertSent = true;
+    }
+  } else {
+    fireAlertSent = false;
+    digitalWrite(LEDRED_PIN, LOW);
+    digitalWrite(RELAY_PIN, HIGH); // Pump OFF
+  }
+
+  // Master Green LED Control
+  if (gasValue <= GAS_THRESHOLD && temp < TEMP_THRESHOLD && fireState != LOW) {
+    digitalWrite(LEDGREEN_PIN, HIGH);
+    digitalWrite(BUZZER_PIN, LOW);
+  } else {
+    digitalWrite(LEDGREEN_PIN, LOW);
+  }
+
+  delay(1000); 
+}
+```
+
+---
+
+## 🚀 Key Takeaways
+
+1. **State Management**: Notice the use of `gasAlertSent` flags. This prevents the ESP32 from spamming your Telegram account with 1,000 messages a minute once a threshold is hit.
+2. **Safety First**: The code defaults the Green LED to ON only when all conditions are safe, providing an instant visual confirmation of system health.
+3. **Scalability**: You could easily add a **Blynk** or **Home Assistant** integration to this setup for a full dashboard view.

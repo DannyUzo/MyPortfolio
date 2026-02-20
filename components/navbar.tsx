@@ -6,34 +6,18 @@ import { Github, Linkedin, Mail, Download, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("home") // Default to home
+  const pathname = usePathname()
 
   const { scrollYProgress } = useScroll()
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50)
-
-      // Update active section based on scroll position
-      const sections = ["home", "chat", "experience", "skills", "projects", "contact"]
-      const scrollPosition = window.scrollY + 100
-
-      for (const section of sections) {
-        const element = document.getElementById(section)
-        if (element) {
-          const offsetTop = element.offsetTop
-          const offsetHeight = element.offsetHeight
-
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section)
-            break
-          }
-        }
-      }
     }
 
     window.addEventListener("scroll", handleScroll)
@@ -43,22 +27,10 @@ export function Navbar() {
   }, [])
 
   const navItems = [
-    { name: "Home", href: "#home", id: "home" },
-    { name: "About", href: "#chat", id: "chat" },
-    { name: "Experience", href: "#experience", id: "experience" },
-    { name: "Skills", href: "#skills", id: "skills" },
-    { name: "Projects", href: "#projects", id: "projects" },
-    { name: "Contact", href: "#contact", id: "contact" },
+    { name: "Home", href: "/" },
+    { name: "Work", href: "/work" },
+    { name: "Journal", href: "/journal" },
   ]
-
-
-  const handleNavClick = (href: string) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-    setIsMobileMenuOpen(false)
-  }
 
   return (
     <motion.nav
@@ -77,34 +49,35 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="text-2xl font-bold text-primary cursor-pointer"
-            onClick={() => handleNavClick("#home")}
-          >
-            Daniel U.
-          </motion.div>
+          <Link href="/" passHref>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="text-2xl font-bold text-primary cursor-pointer"
+            >
+              Daniel U.
+            </motion.div>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <motion.button
-                key={item.name}
-                onClick={() => handleNavClick(item.href)}
-                whileHover={{ scale: 1.05 }}
-                className={`text-sm font-medium transition-colors duration-200 relative ${activeSection === item.id ? "text-primary" : "text-muted-foreground hover:text-primary"
-                  }`}
-              >
-                {item.name}
-                {activeSection === item.id && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-              </motion.button>
+              <Link key={item.name} href={item.href} passHref>
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className={`text-sm font-medium transition-colors duration-200 relative ${pathname === item.href ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    }`}
+                >
+                  {item.name}
+                  {pathname === item.href && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </motion.div>
+              </Link>
             ))}
           </div>
 
@@ -145,14 +118,15 @@ export function Navbar() {
           >
             <div className="px-4 py-6 space-y-4">
               {navItems.map((item) => (
-                <button
+                <Link
                   key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className={`block text-sm font-medium transition-colors duration-200 w-full text-left ${activeSection === item.id ? "text-primary" : "text-muted-foreground hover:text-primary"
+                  href={item.href}
+                  className={`block text-sm font-medium transition-colors duration-200 w-full text-left ${pathname === item.href ? "text-primary" : "text-muted-foreground hover:text-primary"
                     }`}
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.name}
-                </button>
+                </Link>
               ))}
               <div className="flex items-center space-x-4 pt-4 border-t border-border">
                 <Link href={"https://drive.google.com/file/d/1A2gK6JjtI_XlXEXfPxbHFr7KwvJoeUAg/view?usp=drive_link"}>

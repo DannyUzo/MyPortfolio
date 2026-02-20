@@ -1,0 +1,167 @@
+---
+title: "A Beginner's Guide to GSAP Animations"
+author: "Daniel Uzodinma"
+date: "2026-02-20"
+description: "GSAP is the animation engine pro developers swear by. Here's a practical breakdown of its core methods; to, from, fromTo, timelines, and scroll triggers."
+tags: ["GSAP", "Animation", "JavaScript", "Frontend"]
+---
+
+# A Beginner's Guide to GSAP Animations
+
+Animations can make your UI feel alive but CSS and vanilla JS get messy fast. **GSAP (GreenSock Animation Platform)** is the tool that pro front-end developers use to control timing, easing, and sequencing with precision. It's fast, reliable, and works everywhere.
+
+In this guide, we'll break down the basics so you can build smooth, professional animations without frustration.
+
+---
+
+## The Power of GSAP
+
+GSAP isn't just "fancier CSS." It's a JavaScript animation engine built for real-world interfaces:
+
+- Consistent timing across all browsers
+- Robust playback control (play, pause, reverse, seek)
+- Fine-tuned, physics-based easings
+- Performance-optimized for smooth 60fps motion
+
+Once you use it, basic CSS animations feel limited.
+
+---
+
+## Breaking Down Animations into Components
+
+Animations, no matter how complex, are just combinations of:
+
+1. **What you're animating** — a DOM element or CSS property
+2. **Values** — from a start state → to an end state
+3. **Timing** — duration and delay
+4. **Easing** — how the motion feels (bounce, elastic, smooth)
+
+GSAP gives you clean functions to express all of these. You model complexity by combining simple building blocks.
+
+---
+
+## Installation
+
+**Via npm (recommended for React/Next.js projects):**
+
+```bash
+npm install gsap
+```
+
+**Via CDN (for quick prototyping):**
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+```
+
+**Import in your component:**
+
+```js
+import gsap from "gsap";
+```
+
+---
+
+## Core Methods
+
+### `gsap.to()` — Animate *toward* a value
+
+Animates an element from its **current state** to the defined target values.
+
+```js
+gsap.to(".box", {
+  x: 100,
+  opacity: 1,
+  duration: 1,
+  ease: "power2.out"
+});
+```
+
+> **Use when:** you know the final state and want to animate toward it.
+
+---
+
+### `gsap.from()` — Animate *from* a value
+
+Animates an element from the defined values **back to its current state**.
+
+```js
+gsap.from(".box", {
+  y: -100,
+  opacity: 0,
+  duration: 1
+});
+```
+
+> **Use when:** your elements are already in their final layout and you want them to animate in on load.
+
+---
+
+### `gsap.fromTo()` — Full control over start & end
+
+Gives you precise control over both the **start and end** values.
+
+```js
+gsap.fromTo(
+  ".box",
+  { x: -200, opacity: 0 },   // from
+  { x: 0, opacity: 1, duration: 1 }  // to
+);
+```
+
+> **Use when:** you need total control and don't want GSAP to infer the starting state.
+
+---
+
+## Scroll Animations & Staggers
+
+### Scroll Trigger
+
+Tie animations to the user's scroll position using `ScrollTrigger` (a GSAP plugin):
+
+```js
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.to(".section", {
+  scrollTrigger: ".section",
+  opacity: 1,
+  y: 0,
+  duration: 1
+});
+```
+
+### Stagger Animations
+
+Animate a group of elements with a cascading delay between each:
+
+```js
+gsap.to(".item", {
+  y: 0,
+  opacity: 1,
+  duration: 0.6,
+  stagger: 0.2   // each item starts 0.2s after the previous
+});
+```
+
+---
+
+## Learning Resources
+
+- [GreenSock Official Docs & Demos](https://gsap.com/docs/v3/)
+- [JavaScript Mastery – GSAP Course](https://www.youtube.com/@javascriptmastery)
+- [Frontend Masters / Udemy GSAP sections](https://frontendmasters.com)
+
+> Docs + small projects will teach you faster than binge-watching tutorials.
+
+---
+
+## Conclusion
+
+GSAP turns animation from frustrating to fun. Once you understand:
+
+- `to`, `from`, `fromTo`
+- Timelines and sequencing
+- Scroll triggers and staggers
+
+You'll build UI motion that feels professional and intentional. Start small, stack animations, and treat motion like logic not magic.

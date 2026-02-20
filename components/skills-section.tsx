@@ -29,12 +29,24 @@ export function SkillsSection() {
       skills: resumeData.skills.toolsAndPlatforms,
       color: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
     },
+    // {
+    //   title: "Soft Skills",
+    //   skills: resumeData.skills.softSkills,
+    //   color:
+    //     "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800",
+    // },
     {
-      title: "Soft Skills",
-      skills: resumeData.skills.softSkills,
+      title: "ML Tools",
+      skills: resumeData.skills.mlTools,
       color:
-        "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800",
+        "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800",
     },
+    {
+      title: "Robotic Tools",
+      skills: resumeData.skills.roboticTools,
+      color:
+        "bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800",
+    }
   ]
 
   return (

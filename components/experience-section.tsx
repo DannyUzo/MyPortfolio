@@ -22,11 +22,11 @@ export function ExperienceSection() {
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Work Experience</h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            My journey in frontend development and the impact I've made
+            My journey in software engineering and the impact I've made
           </p>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-8xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {allExperience.map((exp, index) => (
               <motion.div
