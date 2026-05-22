@@ -21,16 +21,16 @@ export const resumeData = {
   profile:
     "I'm a frontend engineer passionate about turning complex ideas into clean, responsive, and user-friendly web experiences. With a strong grasp of modern frontend technologies, I build scalable, fast, and functional web applications. Beyond just writing code, I think in terms of product value, focusing on user experience, performance, and maintainability. From integrating real-time features to handling tricky bugs or auth flows, I bring problem-solving and attention to detail. I'm constantly learning, and I love collaborating to ship features that make users happy and businesses grow.",
   professionalExperience: [
-    {
-      company: "ZendFi",
-      image: Zendfi,
-      position: "Software Engineer",
-      duration: "11/2025 - Present",
-      location: "Lagos, Nigeria",
-      description:
-        "At ZendFi, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
-      desc: "Worked across product development, SDKs, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
-    },
+    // {
+    //   company: "ZendFi",
+    //   image: Zendfi,
+    //   position: "Software Engineer",
+    //   duration: "11/2025 - Present",
+    //   location: "Lagos, Nigeria",
+    //   description:
+    //     "At ZendFi, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
+    //   desc: "Worked across product development, SDKs, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
+    // },
     {
       company: "XplicitMode",
       image: XplicMode,
