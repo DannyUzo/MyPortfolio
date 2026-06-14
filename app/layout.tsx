@@ -8,6 +8,7 @@ import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
+
 export const metadata: Metadata = {
   title: "Uzodinma Daniel - Frontend Engineer | Modern Web Developer",
   description:
@@ -25,7 +26,8 @@ export const metadata: Metadata = {
     siteName: "Uzodinma Daniel Portfolio",
   },
   icons: {
-    icon: '/logo.svg', 
+    icon: [{ url: '/logo.svg', type: 'image/svg+xml' }],
+    shortcut: '/favicon.svg',
   },
   robots: {
     index: true,
@@ -48,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <ErrorBoundary>{children}</ErrorBoundary>
         </ThemeProvider>
         <Toaster />

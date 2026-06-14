@@ -1,97 +1,56 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { resumeData } from "@/lib/resume-data"
 
+const skillCategories = [
+  ["Languages & Frameworks", resumeData.skills.languagesAndFrameworks],
+  ["State & Data", resumeData.skills.stateAndData],
+  ["Styling Tools", resumeData.skills.stylingTools],
+  ["Tools & Platforms", resumeData.skills.toolsAndPlatforms],
+  ["ML Tools", resumeData.skills.mlTools],
+  ["Robotics Tools", resumeData.skills.roboticTools],
+] as const
+
 export function SkillsSection() {
-  const skillCategories = [
-    {
-      title: "Languages & Frameworks",
-      skills: resumeData.skills.languagesAndFrameworks,
-      color: "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800",
-    },
-    {
-      title: "State & Data Management",
-      skills: resumeData.skills.stateAndData,
-      color:
-        "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-800 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800",
-    },
-    {
-      title: "Styling Tools",
-      skills: resumeData.skills.stylingTools,
-      color:
-        "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 border-purple-200 dark:border-purple-800",
-    },
-    {
-      title: "Tools & Platforms",
-      skills: resumeData.skills.toolsAndPlatforms,
-      color: "bg-cyan-100 dark:bg-cyan-900/30 text-cyan-800 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
-    },
-    // {
-    //   title: "Soft Skills",
-    //   skills: resumeData.skills.softSkills,
-    //   color:
-    //     "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 border-green-200 dark:border-green-800",
-    // },
-    {
-      title: "ML Tools",
-      skills: resumeData.skills.mlTools,
-      color:
-        "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800",
-    },
-    {
-      title: "Robotic Tools",
-      skills: resumeData.skills.roboticTools,
-      color:
-        "bg-teal-100 dark:bg-teal-900/30 text-teal-800 dark:text-teal-300 border-teal-200 dark:border-teal-800",
-    }
-  ]
-
   return (
-    <section id="skills" className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Skills & Technologies</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            The tools and technologies I use to bring ideas to life
+    <section id="skills" className="grain-surface border-b border-border/60 bg-background py-28">
+      <div className="mx-auto w-full max-w-6xl px-5">
+        <div className="mb-14 max-w-3xl">
+          <p className="font-mono text-sm uppercase tracking-[0.2em] text-primary">Toolchain index</p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+            Skills & Technologies
+          </h2>
+          <p className="mt-5 text-xl leading-8 text-muted-foreground">
+            A practical stack shaped by product interfaces, content systems, embedded experiments, and AI-assisted workflows.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {skillCategories.map((category, index) => (
+        <div className="overflow-hidden rounded-xl border border-border">
+          {skillCategories.map(([title, skills], index) => (
             <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 30 }}
+              key={title}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
+              transition={{ duration: 0.45, delay: index * 0.04 }}
               viewport={{ once: true }}
+              className="grid gap-5 border-b border-border p-6 last:border-b-0 md:grid-cols-[18rem_minmax(0,1fr)] md:p-7"
             >
-              <Card className="h-full hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-xl text-foreground">{category.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {category.skills.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="secondary"
-                        className={`${category.color} hover:scale-105 transition-transform duration-200`}
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              <div>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-primary">0{index + 1}</p>
+                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">{title}</h3>
+              </div>
+
+              <div className="flex flex-wrap gap-2.5">
+                {skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="rounded-full h-fit border border-primary/20 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </motion.div>
           ))}
         </div>

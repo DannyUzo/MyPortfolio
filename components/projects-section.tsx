@@ -1,74 +1,70 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ExternalLink, Github } from "lucide-react"
+import { ArrowUpRight, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { resumeData } from "@/lib/resume-data"
 import Link from "next/link"
 
 export function ProjectsSection() {
   return (
-    <section id="projects" className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Featured Projects</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A showcase of my recent work and personal projects
+    <section id="projects" className="grain-surface border-b border-border/60 bg-background py-28">
+      <div className="mx-auto w-full max-w-6xl px-5">
+        <div className="mb-14 grid gap-6 md:grid-cols-[minmax(0,1fr)_24rem] md:items-end">
+          <div>
+            <p className="font-mono text-sm uppercase tracking-[0.2em] text-primary">Selected builds</p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+              Featured Projects
+            </h2>
+          </div>
+          <p className="text-xl leading-8 text-muted-foreground">
+            Product work and experiments across frontend engineering, automation, and AI-assisted systems.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid gap-px overflow-hidden rounded-xl border border-border md:grid-cols-2 lg:grid-cols-3">
           {resumeData.projects.map((project, index) => (
-            <motion.div
+            <motion.article
               key={project.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.06 }}
               viewport={{ once: true }}
+              className="flex min-h-[26rem] flex-col p-6 border"
             >
-              <Card className="h-full flex flex-col justify-between hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 bg-card border-border">
-                <CardHeader>
-                  <CardTitle className="text-xl text-foreground mb-2">{project.name}</CardTitle>
-                  <p className="text-muted-foreground leading-relaxed">{project.description}</p>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {project.technologies.map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="outline"
-                        className="border-primary/20 dark:border-primary/30 text-primary hover:bg-primary/10 dark:hover:bg-primary/20"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-3">
-                    <Link href={project.github}>
-                      <Button size="sm" variant="outline" className="flex-1 border-border hover:bg-accent">
-                        <Github className="w-4 h-4 mr-2" />
-                        Code
-                      </Button>
-                    </Link>
-                    <Link href={project.link}>
-                      <Button size="sm" className={`flex-1 bg-primary hover:bg-primary/90 text-primary-foreground ${project.link === "" && "cursor-not-allowed"}`}>
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Live Demo
-                      </Button>
-                    </Link>
-                      {project.link === "" && ( <p className="text-[9px] text-orange-400 mt-1">Live Demo not available.</p>)}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+              <div className="mb-8 flex items-center justify-between font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                <span>Project / 0{index + 1}</span>
+                <span>{project.tags}</span>
+              </div>
+
+              <h3 className="text-2xl font-semibold leading-tight tracking-tight text-foreground">{project.name}</h3>
+              <p className="mt-5 text-lg leading-8 text-muted-foreground">{project.description}</p>
+
+              <div className="mt-7 flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <span key={tech} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-auto flex gap-3 pt-10">
+                {project.github ? (
+                  <Link href={project.github} className="flex-1">
+                    <Button variant="outline" size="sm" className="w-full border-border hover:border-primary/60 hover:text-primary">
+                      <Github className="mr-2 h-4 w-4" /> Code
+                    </Button>
+                  </Link>
+                ) : null}
+                {project.link ? (
+                  <Link href={project.link} className="flex-1">
+                    <Button size="sm" className="w-full">
+                      <ArrowUpRight className="mr-2 h-4 w-4" /> Live
+                    </Button>
+                  </Link>
+                ) : null}
+              </div>
+            </motion.article>
           ))}
         </div>
       </div>

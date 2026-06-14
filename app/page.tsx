@@ -11,7 +11,7 @@ import { ExpertiseSection } from "@/components/expertise-section"
 
 export default function Home() {
   return (
-    <main className="min-h-screen max-w-8xl">
+    <main className="min-h-screen bg-background">
       <SectionErrorBoundary sectionName="Navigation">
         <Navbar />
       </SectionErrorBoundary>
@@ -19,11 +19,17 @@ export default function Home() {
       <SectionErrorBoundary sectionName="Hero">
         <HeroUnified />
       </SectionErrorBoundary>
+
       <SectionErrorBoundary sectionName="Expertise">
         <ExpertiseSection />
       </SectionErrorBoundary>
+
       <SectionErrorBoundary sectionName="Experience">
         <ExperienceSection />
+      </SectionErrorBoundary>
+
+      <SectionErrorBoundary sectionName="Projects">
+        <ProjectsSection />
       </SectionErrorBoundary>
 
       <SectionErrorBoundary sectionName="Skills">

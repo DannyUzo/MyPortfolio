@@ -1,0 +1,14 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="2" fill="#050505"/>
+  <rect x="1" y="1" width="62" height="62" rx="1" stroke="white" stroke-opacity="0.1"/>
+  <text
+    x="32"
+    y="43"
+    text-anchor="middle"
+    fill="#ffffff"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace"
+    font-size="34"
+    font-weight="900"
+    letter-spacing="-2"
+  >du</text>
+</svg>

@@ -1,149 +1,123 @@
 "use client"
 
+import type React from "react"
+
 import { Navbar } from "@/components/navbar"
 import { resumeData } from "@/lib/resume-data"
-import { Badge } from "@/components/ui/badge"
 import { motion } from "framer-motion"
 import Link from "next/link"
 
 export default function WorkPage() {
-    return (
-        <main className="min-h-screen bg-background">
-            <Navbar />
+  return (
+    <main className="min-h-screen grain-surface  bg-background text-foreground">
+      <Navbar />
 
-            <div className="container mx-auto px-4 pt-32 pb-20">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="max-w-4xl mx-auto mb-16 text-center"
-                >
-                    <h1 className="text-4xl md:text-6xl font-bold mb-6">Work & Projects</h1>
-                    <p className="text-lg text-muted-foreground">
-                        A collection of my work across Software Engineering, Embedded Systems, and Artificial Intelligence.
-                    </p>
-                </motion.div>
+      <div className="mx-auto w-full max-w-6xl px-5 pb-24 pt-32">
+        <motion.header
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 max-w-4xl"
+        >
+          <p className="font-mono text-sm uppercase tracking-[0.2em] text-primary">Work archive</p>
+          <h1 className="mt-5 text-4xl font-semibold leading-[1.08] tracking-tight md:text-5xl">
+            Projects across screens, models, and machines.
+          </h1>
+          <p className="mt-7 max-w-3xl text-xl leading-8 text-muted-foreground">
+            A selected archive of frontend systems, AI experiments, and hardware builds, organized like engineering notes rather than a gallery wall.
+          </p>
+        </motion.header>
 
-                {/* SOFTWARE PROJECTS */}
-                <section id="software" className="mb-24">
-                    <div className="flex items-center gap-4 mb-10">
-                        <h2 className="text-3xl font-bold">Software Engineering</h2>
-                        <div className="h-px bg-border flex-1" />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {resumeData.projects.map((project) => (
-                            <div key={project.name} className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-6 hover:border-primary/50 transition-all">
-                                <div>
-                                    <div className="flex items-center justify-between   ">
-                                        <h3 className="font-semibold text-xl mb-2">{project.name}</h3>
-                                        <p className="text-muted-foreground text-sm">({project.tags})</p>
-                                    </div>
-                                    <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {project.technologies.map((tech) => (
-                                            <Badge key={tech} variant="secondary" className="text-xs text-blue-500">
-                                                {tech}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="flex gap-4 mt-auto">
-                                    {project.link && (
-                                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline">
-                                            Live Demo
-                                        </a>
-                                    )}
-                                    {project.github && (
-                                        <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline">
-                                            GitHub
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+        <ProjectSection id="software" title="Software Engineering" index="01">
+          {resumeData.projects.map((project) => (
+            <ProjectRecord
+              key={project.name}
+              title={project.name}
+              eyebrow={project.tags?.join(" / ") || "Software Project"}
+              description={project.description}
+              tags={project.technologies}
+              links={[
+                project.link ? { label: "Live Demo", href: project.link } : null,
+                project.github ? { label: "GitHub", href: project.github } : null,
+              ].filter(Boolean) as Array<{ label: string; href: string }>}
+            />
+          ))}
+        </ProjectSection>
 
-                {/* AI / ML PROJECTS */}
-                <section id="ai" className="mb-24">
-                    <div className="flex items-center gap-4 mb-10">
-                        <h2 className="text-3xl font-bold">ML/AI Projects</h2>
-                        <div className="h-px bg-border flex-1" />
-                    </div>
+        <ProjectSection id="ai" title="ML/AI Projects" index="02">
+          {resumeData.aiProjects?.map((project: any) => (
+            <ProjectRecord
+              key={project.title}
+              title={project.title}
+              eyebrow={project.modelType || "AI System"}
+              description={project.description}
+              tags={project.stack || []}
+              links={project.github ? [{ label: "Repository", href: project.github }] : []}
+            />
+          ))}
+        </ProjectSection>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {resumeData.aiProjects?.map((project: any) => (
-                            <div key={project.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-6 hover:border-primary/50 transition-all">
-                                <div>
-                                    <h3 className="font-semibold text-xl mb-2">{project.title}</h3>
-                                    <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {project.modelType && (
-                                            <Badge variant="outline" className="border-blue-500/20 text-blue-500 bg-blue-500/5">
-                                                {project.modelType}
-                                            </Badge>
-                                        )}
-                                        {project.stack?.map((tech: string) => (
-                                            <Badge key={tech} variant="secondary" className="text-xs">
-                                                {tech}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                                {project.github && (
-                                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline mt-auto">
-                                        View Repository
-                                    </a>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </section>
+        <ProjectSection id="hardware" title="Hardware Systems" index="03">
+          {resumeData.hardwareProjects?.map((project: any) => (
+            <ProjectRecord
+              key={project.title}
+              title={project.title}
+              eyebrow={project.microcontrollers?.join(" / ") || "Embedded Build"}
+              description={project.description}
+              tags={[...(project.components || []), ...(project.microcontrollers || [])]}
+              links={
+                project.firmwareSlug
+                  ? [{ label: "View Firmware", href: `/work/${project.firmwareSlug}` }]
+                  : project.github
+                    ? [{ label: "View Firmware", href: project.github }]
+                    : []
+              }
+            />
+          ))}
+        </ProjectSection>
+      </div>
+    </main>
+  )
+}
 
-                {/* HARDWARE PROJECTS */}
-                <section id="hardware" className="mb-24">
-                    <div className="flex items-center gap-4 mb-10">
-                        <h2 className="text-3xl font-bold">Hardware Systems</h2>
-                        <div className="h-px bg-border flex-1" />
-                    </div>
+function ProjectSection({ id, title, index, children }: { id: string; title: string; index: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="border-t border-border py-14 first:border-t-0 first:pt-0">
+      <div className="mb-8 flex items-center gap-5">
+        <span className="font-mono text-sm uppercase tracking-[0.2em] text-primary">{index}</span>
+        <h2 className="text-4xl font-semibold tracking-tight">{title}</h2>
+        <div className="h-px flex-1 bg-border" />
+      </div>
+      <div className="overflow-hidden rounded-xl border border-border">{children}</div>
+    </section>
+  )
+}
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {resumeData.hardwareProjects?.map((project: any) => (
-                            <div key={project.title} className="group relative flex flex-col justify-between overflow-hidden rounded-xl border border-border bg-card p-6 hover:border-primary/50 transition-all">
-                                <div>
-                                    <h3 className="font-semibold text-xl mb-2">{project.title}</h3>
-                                    <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
+function ProjectRecord({ title, eyebrow, description, tags, links }: { title: string; eyebrow?: string; description: string; tags: string[]; links: Array<{ label: string; href: string }> }) {
+  return (
+    <article className="grid gap-6 border-b border-border bg-card p-6 last:border-b-0 md:grid-cols-[minmax(0,1fr)_16rem] md:p-8">
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">{eyebrow}</p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">{title}</h3>
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-muted-foreground">{description}</p>
+        {tags.length ? (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <span key={tag} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
+      </div>
 
-                                    <div className="space-y-3 mb-6">
-                                        {project.components && (
-                                            <div className="flex flex-wrap gap-1.5">
-                                                <span className="text-xs font-mono text-muted-foreground mr-1">COMPONENTS:</span>
-                                                {project.components.map((s: string) => <Badge key={s} variant="outline" className="text-[10px] py-0 h-5">{s}</Badge>)}
-                                            </div>
-                                        )}
-                                        {project.microcontrollers && (
-                                            <div className="flex flex-wrap gap-1.5">
-                                                <span className="text-xs font-mono text-muted-foreground mr-1">MCU:</span>
-                                                {project.microcontrollers.map((m: string) => <Badge key={m} variant="outline" className="text-[10px] py-0 h-5">{m}</Badge>)}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                                {project.firmwareSlug ? (
-                                    <Link href={`/work/${project.firmwareSlug}`} className="text-sm font-medium text-primary hover:underline mt-auto">
-                                        View Firmware →
-                                    </Link>
-                                ) : project.github ? (
-                                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline mt-auto">
-                                        View Firmware
-                                    </a>
-                                ) : null}
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-            </div>
-        </main>
-    )
+      <div className="flex flex-wrap content-start gap-3 md:justify-end">
+        {links.map((link) => (
+          <Link key={link.href} href={link.href} className="text-base font-medium text-primary hover:underline">
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </article>
+  )
 }

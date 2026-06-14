@@ -1,150 +1,110 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { motion, useScroll } from "framer-motion"
-import { Github, Linkedin, Mail, Download, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+
+const navItems = [
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Logbook", href: "/journal" },
+  { name: "Work", href: "/work" },
+]
+
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/"
+  if (href.startsWith("/#")) return false
+  return pathname.startsWith(href)
+}
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
-
   const { scrollYProgress } = useScroll()
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 24)
     window.addEventListener("scroll", handleScroll)
-    handleScroll() // Check initial state
-
+    handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Work", href: "/work" },
-    { name: "Journal", href: "/journal" },
-  ]
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border"
-        : "bg-background/80 backdrop-blur-sm"
-        }`}
+      transition={{ duration: 0.45 }}
+      className={`fixed left-0 right-0 top-0 z-50 grain-surface border-b border-border transition-colors ${
+        isScrolled ? "bg-background/90 backdrop-blur-xl" : "bg-background/75 backdrop-blur-lg"
+      }`}
     >
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-blue-500 z-50"
+        className="fixed left-0 right-0 top-0 z-50 h-px bg-border"
         style={{ scaleX: scrollYProgress, transformOrigin: "0%" }}
       />
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" passHref>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="text-2xl font-bold text-primary cursor-pointer"
-            >
-              Daniel U.
-            </motion.div>
-          </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link key={item.name} href={item.href} passHref>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className={`text-sm font-medium transition-colors duration-200 relative ${pathname === item.href ? "text-primary" : "text-muted-foreground hover:text-primary"
-                    }`}
-                >
-                  {item.name}
-                  {pathname === item.href && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </motion.div>
-              </Link>
-            ))}
-          </div>
+      <div className="mx-auto grid h-24 w-full max-w-[1220px] grid-cols-[auto_1fr_auto] items-center px-6">
+        <Link
+          href="/"
+          className="font-mono text-xl font-black tracking-tight text-foreground transition-colors hover:text-blue-500/70 dark:hover:text-blue-300/70"
+          aria-label="Daniel U home"
+        >
+          Daniel Uzodinma
+        </Link>
 
-          {/* Desktop Social Links & Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
-            <ThemeToggle />
-            <Link href={"https://drive.google.com/file/d/1dkE5icQbO3gDyPLwd-p6I7Hx6kL6GNLT/view?usp=sharing"}>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground ml-4"
+        <div className="hidden items-center justify-center gap-10 md:flex">
+          {navItems.map((item) => {
+            const active = isActive(pathname, item.href)
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`text-base font-semibold transition-colors hover:text-blue-500/70 dark:hover:text-blue-300/70 ${
+                  active ? "text-foreground" : "text-muted-foreground"
+                }`}
               >
-                <Download className="w-4 h-4 mr-2" />
-                Resume
-              </Button>
-            </Link>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center space-x-2">
-            <ThemeToggle />
-            <button
-              className="text-muted-foreground hover:text-primary"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+                {item.name}
+              </Link>
+            )
+          })}
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-md border-t border-border"
-          >
-            <div className="px-4 py-6 space-y-4">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`block text-sm font-medium transition-colors duration-200 w-full text-left ${pathname === item.href ? "text-primary" : "text-muted-foreground hover:text-primary"
-                    }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <div className="flex items-center space-x-4 pt-4 border-t border-border">
-                <Link href={"https://drive.google.com/file/d/1A2gK6JjtI_XlXEXfPxbHFr7KwvJoeUAg/view?usp=drive_link"}>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Resume
-                  </Button>
-                </Link>
+        <div className="hidden justify-self-end md:block">
+          <ThemeToggle />
+        </div>
 
-              </div>
-            </div>
-          </motion.div>
-        )}
+        <button
+          aria-label="Toggle menu"
+          className="justify-self-end rounded-md border border-border p-2 text-muted-foreground transition-colors hover:border-blue-400/30 hover:text-blue-500/70 dark:hover:border-blue-300/25 dark:hover:text-blue-300/70 md:hidden"
+          onClick={() => setIsMobileMenuOpen((open) => !open)}
+        >
+          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
+
+      {isMobileMenuOpen && (
+        <div className="border-t border-border bg-background/95 px-6 py-5 backdrop-blur-xl md:hidden">
+          <div className="space-y-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`block text-base font-semibold transition-colors hover:text-blue-500/70 dark:hover:text-blue-300/70 ${
+                  isActive(pathname, item.href) ? "text-foreground" : "text-muted-foreground"
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+            <ThemeToggle />
+          </div>
+        </div>
+      )}
     </motion.nav>
   )
 }

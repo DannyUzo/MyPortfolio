@@ -85,7 +85,7 @@ export function AIChat() {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         content:
-          data.response ||
+          data.answer ||
           "I'm experiencing technical difficulties. Please contact UZODINMA DANIEL at uzodinmadaniel42@gmail.com.",
         isUser: false,
         timestamp: new Date(),
@@ -132,7 +132,7 @@ export function AIChat() {
         <>
           {/* Chat Toggle Button */}
           <motion.div
-            className="fixed bottom-6 right-6 z-50 bg-gradient-to-br from-blue-50 to-background rounded-full dark:from-blue-950/20 dark:to-background" 
+            className="fixed bottom-6 right-6 z-50 rounded-full bg-background/80 backdrop-blur-xl"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
@@ -140,7 +140,7 @@ export function AIChat() {
             <Button
               onClick={() => setIsOpen(!isOpen)}
               size="lg"
-              className="rounded-full w-14 h-14 bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="rounded-full w-14 h-14 bg-primary hover:bg-primary/90 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -178,13 +178,13 @@ export function AIChat() {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 className="fixed bottom-24 right-6 z-40 w-96 max-w-[calc(100vw-3rem)]"
               >
-                <Card className="shadow-2xl border-0 bg-gradient-to-br from-blue-50 to-background dark:from-blue-950/20 dark:to-background backdrop-blur-sm">
-                  <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
-                    <CardTitle className="flex items-center gap-2 text-lg">
+                <Card className="border border-border bg-card shadow-2xl shadow-black/30 backdrop-blur-xl">
+                  <CardHeader className="rounded-t-lg border-b border-border bg-muted/50 text-foreground">
+                    <CardTitle className="flex items-center gap-2 text-xl">
                       <Bot className="w-5 h-5" />
                       Ask me about Daniel!
                     </CardTitle>
-                    <p className="text-blue-100 text-sm">
+                    <p className="text-base text-muted-foreground">
                       I can answer questions about his experience, skills, and projects.
                     </p>
                   </CardHeader>
@@ -200,22 +200,21 @@ export function AIChat() {
                             className={`flex gap-3 ${message.isUser ? "justify-end" : "justify-start"}`}
                           >
                             {!message.isUser && (
-                              <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                <Bot className="w-4 h-4 text-blue-600" />
+                              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border bg-background">
+                                <Bot className="w-4 h-4 text-primary" />
                               </div>
                             )}
                             <div
-                              className={`max-w-[80%] p-3 rounded-lg ${
-                                message.isUser
-                                  ? "bg-blue-600 text-white rounded-br-sm"
-                                  : "bg-gray-100 dark:bg-blue-900/20 dark:border dark:border-blue-800 dark:text-foreground text-gray-800 rounded-bl-sm"
-                              }`}
+                              className={`max-w-[80%] p-3 rounded-lg ${message.isUser
+                                ? "bg-primary text-primary-foreground rounded-br-sm"
+                                : "bg-muted border border-border dark:text-foreground text-foreground rounded-bl-sm"
+                                }`}
                             >
-                              <p className="text-sm leading-relaxed">{message.content}</p>
+                              <p className="text-base leading-relaxed">{message.content}</p>
                             </div>
                             {message.isUser && (
-                              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                                <User className="w-4 h-4 text-gray-600" />
+                              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border bg-background">
+                                <User className="w-4 h-4 text-muted-foreground" />
                               </div>
                             )}
                           </motion.div>
@@ -226,10 +225,10 @@ export function AIChat() {
                             animate={{ opacity: 1 }}
                             className="flex gap-3 justify-start"
                           >
-                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                              <Bot className="w-4 h-4 text-blue-600" />
+                            <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background">
+                              <Bot className="w-4 h-4 text-primary" />
                             </div>
-                            <div className="bg-gray-100 p-3 rounded-lg rounded-bl-sm">
+                            <div className="bg-muted p-3 rounded-lg rounded-bl-sm">
                               <div className="flex gap-1">
                                 <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                                 <div
@@ -248,9 +247,9 @@ export function AIChat() {
                       <div ref={messagesEndRef} />
                     </ScrollArea>
 
-                    <div className="p-4 border-t bg-gray-50 dark:bg-blue-950/20 rounded-b-lg">
+                    <div className="p-4 border-t bg-muted/40 rounded-b-lg">
                       <div className="flex gap-2 mb-2">
-                        <Button onClick={handleReset} variant="outline" size="sm" className="text-xs">
+                        <Button onClick={handleReset} variant="outline" size="sm" className="text-sm">
                           <RotateCcw className="w-3 h-3 mr-1" />
                           Reset
                         </Button>
@@ -268,7 +267,7 @@ export function AIChat() {
                           onClick={handleSendMessage}
                           disabled={!inputValue.trim() || isLoading}
                           size="sm"
-                          className="bg-blue-600 hover:bg-blue-700"
+                          className="bg-primary hover:bg-primary/90"
                         >
                           <Send className="w-4 h-4" />
                         </Button>

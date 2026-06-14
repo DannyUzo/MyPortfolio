@@ -132,7 +132,7 @@ export function ChatSection() {
     <section
       ref={sectionRef}
       id="chat"
-      className="py-20 bg-gradient-to-br from-blue-50 to-background dark:from-blue-950/20 dark:to-background min-h-screen flex items-center justify-center"
+      className="border-t border-border/60 bg-background py-28"
     >
       <div className="container mx-auto px-4">
         <motion.div
@@ -143,10 +143,10 @@ export function ChatSection() {
           className="max-w-4xl mx-auto"
         >
           <div className="bg-card rounded-2xl border border-border overflow-hidden shadow-2xl">
-            <div className="bg-gradient-to-r from-primary to-blue-700 dark:to-blue-500 p-6 text-primary-foreground">
+            <div className="border-b border-border bg-muted/50 p-6 text-foreground">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-primary-foreground" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background">
+                  <Bot className="w-5 h-5 text-foreground" />
                 </div>
                 <h2 className="text-2xl font-bold">Ask me anything!</h2>
                 {hasApiError && (
@@ -155,12 +155,12 @@ export function ChatSection() {
                   </div>
                 )}
               </div>
-              <p className="text-primary-foreground/80 text-lg">
-                Do you wish to know anything about me? Then ask me here 👇
+              <p className="text-foreground/80 text-xl">
+                Ask about my engineering background, projects, tools, and implementation decisions.
               </p>
               {hasApiError && (
-                <p className="text-yellow-200 text-sm mt-2">
-                  ⚠️ Chat service is experiencing issues. Responses may be delayed.
+                <p className="text-yellow-200 text-base mt-2">
+                  Chat service is experiencing issues. Responses may be delayed.
                 </p>
               )}
             </div>
@@ -178,9 +178,8 @@ export function ChatSection() {
                   >
                     {!message.isUser && (
                       <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                          message.isError ? "bg-red-100 dark:bg-red-900/20" : "bg-blue-100 dark:bg-blue-900/20"
-                        }`}
+                        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md ${message.isError ? "border border-red-500/30 bg-red-500/10" : "border border-border bg-background"
+                          }`}
                       >
                         {message.isError ? (
                           <AlertTriangle className="w-4 h-4 text-red-600 dark:text-red-400" />
@@ -190,18 +189,17 @@ export function ChatSection() {
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] p-4 rounded-lg ${
-                        message.isUser
+                      className={`max-w-[80%] p-4 rounded-lg ${message.isUser
                           ? "bg-primary text-primary-foreground rounded-br-sm"
                           : message.isError
-                            ? "bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 rounded-bl-sm border border-red-200 dark:border-red-800"
-                            : "bg-blue-50 dark:bg-blue-900/20 text-foreground rounded-bl-sm border border-blue-100 dark:border-blue-800"
-                      }`}
+                            ? "border border-red-500/30 bg-red-500/10 text-red-200 rounded-bl-sm"
+                            : "bg-muted text-foreground rounded-bl-sm border border-border"
+                        }`}
                     >
                       <p className="leading-relaxed">{message.content}</p>
                     </div>
                     {message.isUser && (
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md border border-border bg-background">
                         <User className="w-4 h-4 text-muted-foreground" />
                       </div>
                     )}
@@ -209,10 +207,10 @@ export function ChatSection() {
                 ))}
                 {isLoading && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3 justify-start">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background">
                       <Bot className="w-4 h-4 text-primary" />
                     </div>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg rounded-bl-sm border border-blue-100 dark:border-blue-800">
+                    <div className="bg-muted p-4 rounded-lg rounded-bl-sm border border-border">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
                         <div
@@ -244,7 +242,7 @@ export function ChatSection() {
                   Reset Chat
                 </Button>
                 {hasApiError && (
-                  <span className="text-sm text-red-600 dark:text-red-400 flex items-center">
+                  <span className="text-base text-red-600 dark:text-red-400 flex items-center">
                     <AlertTriangle className="w-4 h-4 mr-1" />
                     Service issues detected
                   </span>
@@ -255,14 +253,14 @@ export function ChatSection() {
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="What do you want to know about me? 💬"
+                  placeholder="What do you want to know about my work?"
                   className="flex-1 bg-background border-border focus:border-primary focus:ring-primary"
                   disabled={isLoading}
                 />
                 <Button
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim() || isLoading}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-6"
+                  className="bg-primary hover:bg-primary/90 text-foreground px-6"
                 >
                   <Send className="w-4 h-4" />
                 </Button>

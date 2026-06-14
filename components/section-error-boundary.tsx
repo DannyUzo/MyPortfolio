@@ -40,17 +40,17 @@ export class SectionErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="py-20 bg-gradient-to-br from-red-50 to-white">
+        <div className="border-t border-border bg-background py-24">
           <div className="container mx-auto px-4">
             <div className="max-w-md mx-auto text-center">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-md border border-red-500/30 bg-red-500/10">
                 <AlertTriangle className="w-8 h-8 text-red-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">{this.props.sectionName} Section Error</h2>
-              <p className="text-gray-600 mb-6">
+              <h2 className="text-2xl font-bold text-foreground mb-4">{this.props.sectionName} Section Error</h2>
+              <p className="text-muted-foreground mb-6">
                 There was an issue loading this section. Please try refreshing or contact me directly.
               </p>
-              <Button onClick={this.handleReset} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={this.handleReset} className="bg-primary hover:bg-primary/90">
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Retry Section
               </Button>

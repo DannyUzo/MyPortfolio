@@ -2,8 +2,9 @@ import XplicMode from "@/public/images/image.png"
 import Zuri from "@/public/images/zuriLogo.jpeg"
 import Nutec from "@/public/images/nutec.jpg"
 import Nuesa from "@/public/images/nuesa.png"
-import Zendfi from "@/public/images/zendfi.png"
-
+import Gearsparks from "@/public/images/gearsparks_logo.jpg"
+import Mhetlabs from "@/public/images/Mhetlabs.png"
+import Platoons from "@/public/images/platoons.png"
 
 export const resumeData = {
   personalInfo: {
@@ -32,6 +33,36 @@ export const resumeData = {
     //   desc: "Worked across product development, SDKs, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
     // },
     {
+      company: "GearSparks Consulting",
+      image: Gearsparks,
+      position: "Forward Deployed Front-end Engineer",
+      duration: "03/2026 - Present",
+      location: "Lagos, Nigeria",
+      description:
+        "At Gearsparks, I Design, develop, and maintain modern, responsive frontend applications with a focus on performance, usability, and scalability. Implement product requirements into pixel-perfect user interfaces, integrating APIs and services seamlessly. Build and manage state, data flows, and component architectures using appropriate frontend frameworks and tools.",
+      desc: "At Gearsparks, I Design, develop, and maintain modern, responsive frontend applications with a focus on performance, usability, and scalability. Build and manage state, data flows, and component architectures using appropriate frontend frameworks and tools. ",
+    },
+    // {
+    //   company: "Mhetlabs",
+    //   image: Mhetlabs,
+    //   position: "Software Engineer",
+    //   duration: "06/2026 - Present",
+    //   location: "Abeokuta, Nigeria",
+    //   description:
+    //     "At Mhetlabs, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
+    //   desc: "Lead frontend engineer working across product development, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
+    // },
+    {
+      company: "The Platoons Entertainment",
+      image: Platoons,
+      position: "Front-end Developer",
+      duration: "03/2026 - 05/2026 (Contract)",
+      location: "Lagos, Nigeria",
+      description:
+        "I supported testing and optimization, connecting frontend components to backend APIs, implementing new designs, fixed bugs and improved performance. Collaborating with the company founder and lead developer.",
+      desc: "Supported testing and optimization, connecting frontend components to backend APIs, implementing new designs, fixed bugs and improved performance. Collaborating with the company founder and lead developer.",
+    },
+    {
       company: "XplicitMode",
       image: XplicMode,
       position: "Frontend Engineer",
@@ -57,7 +88,7 @@ export const resumeData = {
       company: "NUTEC-FUNAAB",
       image: Nutec,
       position: "Frontend Engineering Intern",
-      duration: "2024",
+      duration: "02/2024 - 06/2024",
       location: "Abeokuta, Nigeria",
       description:
         "Assisted senior developers with frontend development tasks while gaining hands-on experience with JavaScript, TypeScript, Tailwind CSS, and modern frontend frameworks like React and Next.js. Actively contributed in team meetings, shared ideas to improve workflows, and participated in real project cycles. During the internship, I took up a tutor role, where I trained and mentored fellow students in frontend engineering, helping them grasp key concepts and apply best practices in real-world projects.",
@@ -67,7 +98,7 @@ export const resumeData = {
       company: "Zuri Internship(HNGx)",
       image: Zuri,
       position: "Frontend Engineering Intern",
-      duration: "2023",
+      duration: "09/2023 - 10/2023",
       location: "Remote, Nigeria",
       description:
         "I built a lightweight video recording tool, a responsive movie listing site, and an image gallery with download features among other projects; all styled using HTML, CSS, React, and Next.js to ensure smooth and user-friendly experiences. I collaborated closely with mentors, project managers, backend engineers and team members, refined UI interactions, optimized asset loading, and ensured cross-browser compatibility while delivering these projects on schedule.",
