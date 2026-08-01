@@ -6,7 +6,7 @@ description: "An eye-opener to Green Computing from the Summer School at UNILAG,
 tags: ["Green Computing", "Sustainability", "Software Engineering", "IoT", "Mechatronics"]
 ---
 
-When we hear about climate change and $\text{CO}_2$ emissions, we picture large factories releasing tons of gases, cars, ships, data centers, and unregulated incineration... but did you know the code you write too has $\text{CO}_2$ emissions?
+When we hear about climate change and CO2 emissions, we picture large factories releasing tons of gases, cars, ships, data centers, and unregulated incineration... but did you know the code you write too has CO2 emissions?
 
 I know how that sounds, but hear me out: this episode is a major eye-opener to **Green Computing**. Last month, I was privileged to attend the **Green and Sustainable Software Engineering Summer School** at UNILAG. It was a 5-day event and a burst of personalities. We had participants from about 5 universities across Nigeria and facilitators from universities across Europe—professors, Drs, post-graduate students, academicians, and industry experts. At one point, we were the only undergraduates in the room, but it was a good thing. I never knew about Green Software or how code can cause the ice caps to melt faster; these people basically studied it, researched, and wrote papers on it.
 
@@ -24,13 +24,13 @@ When we exclude the heavy manufacturing footprint of hardware, the day-to-day op
 
 ## Compute === Carbon
 
-Now I know you're thinking, *how does my HTML and CSS cause $\text{CO}_2$ emissions?* Well, it all comes down to how efficient your code is. For instance, a logic written in Java is way more efficient than the same logic written in JavaScript (no shade on JavaScript tbh), and this has real impact. I remember writing a logic 2 days ago in Go (GoLang) because Node.js would have been less efficient, and considering the use case of the logic, we needed it to be very fast. But away from that, what do I mean by efficiency?
+Now I know you're thinking, *how does my HTML and CSS cause CO2 emissions?* Well, it all comes down to how efficient your code is. For instance, a logic written in Java is way more efficient than the same logic written in JavaScript (no shade on JavaScript tbh), and this has real impact. I remember writing a logic 2 days ago in Go (GoLang) because Node.js would have been less efficient, and considering the use case of the logic, we needed it to be very fast. But away from that, what do I mean by efficiency?
 
 > **Compute === Carbon**
 
 Every line of code you write translates to hardware execution. Hardware requires electricity. Electricity generation emits carbon. Therefore, inefficient code literally burns physical resources. It's not just about being slow—when a logic uses more compute than it should, it causes servers to use more energy, require more cooling, and creates a domino effect leading to real carbon being emitted. Multiply that across the millions of websites, apps, and pieces of software all around the world, and it's no longer weightless. It has real-world impact.
 
-This problem can be broken down into various aspects, but I'd just discuss two—this might get a bit technical, but we're all nerds here right? oh good!
+This problem can be broken down into various aspects, but I'd just discuss two—this might get a bit technical, but y'all are smart :)
 
 ### 1. Algorithmic Efficiency & Cyclomatic Complexity
 
@@ -50,20 +50,22 @@ Sending uncompressed data, oversized images, or bloated JSON payloads wastes ene
 
 Someone reading this might be like, *"energy this, energy that, it's all theoretical."* So for the nerds in the house, here is a bit of mathematical perspective:
 
-$$\text{SCI} = \frac{(E \times I) + M}{R}$$
+```math
+SCI = [(E * I) + M] / R
+```
 
 Ahhhhhhhh, some cute maths. This is the **Software Carbon Intensity (SCI)** specification equation, standardized by the **Green Software Foundation**. 
 
 So what do these letters actually mean for your codebase? Let’s cut the fat:
 
-* **$E$ = Energy Consumed:** The raw electricity your code burns (kWh). Inefficient loops and complicated logic keep the CPU awake, driving this number up.
-* **$I$ = Carbon Intensity:** How dirty your local power grid is ($\text{gCO}_2\text{e/kWh}$). If your servers are running on fossil fuels, your emissions multiply. This depends on what type of energy your grid relies on—renewable or fossil fuel.
-* **$M$ = Embodied Emissions:** The physical carbon cost of manufacturing the hardware. If your heavy frontend forces users to upgrade their devices, or demands oversized compute nodes such as GPUs or large RAMs instead of lean edge modules, your code is generating physical e-waste.
-* **$R$ = Functional Unit:** The denominator (e.g., per 1,000 API requests, or per route mapped). This turns vague sustainability talk into an actual, measurable engineering rate you can optimize.
+* **`E` (Energy Consumed):** The raw electricity your code burns (kWh). Inefficient loops and complicated logic keep the CPU awake, driving this number up.
+* **`I` (Carbon Intensity):** How dirty your local power grid is (`gCO2e/kWh`). If your servers are running on fossil fuels, your emissions multiply. This depends on what type of energy your grid relies on—renewable or fossil fuel.
+* **`M` (Embodied Emissions):** The physical carbon cost of manufacturing the hardware. If your heavy frontend forces users to upgrade their devices, or demands oversized compute nodes such as GPUs or large RAMs instead of lean edge modules, your code is generating physical e-waste.
+* **`R` (Functional Unit):** The denominator (e.g., per 1,000 API requests, or per route mapped). This turns vague sustainability talk into an actual, measurable engineering rate you can optimize.
 
-You can’t write a fast algorithm (optimizing $E$), dump it on an oversized server (inflating $M$), and call it green. You have to engineer the whole system. 
+You can’t write a fast algorithm (optimizing `E`), dump it on an oversized server (inflating `M`), and call it green. You have to engineer the whole system. 
 
-For more practical insights, you can check out the carbon score of this blog on [websitecarbon.com](https://www.websitecarbon.com/website/amtes-pages-dev/) *(PS: It's on an A-tier rating, and only 0.07g of $\text{CO}_2$ is produced every time someone visits this web page. Feel free to check other sites).*
+For more practical insights, you can check out the carbon score of this blog on [websitecarbon.com](https://www.websitecarbon.com/website/amtes-pages-dev/) *(PS: It's on an A-tier rating, and only 0.07g of CO2 is produced every time someone visits this web page. Feel free to check other sites).*
 
 ---
 
@@ -79,6 +81,6 @@ This power constraint should be one of the major things to consider when designi
 
 ## Conclusion
 
-As I bring this episode to a close, it was truly a lovely week in UNILAG (really great Campus, btw), but the lessons learned will shape the way we build systems from here on. 
+As I bring this episode to a close, it was truly a lovely week in UNILAG (should I compare to FUNAAB?), but the lessons learned will shape the way we build systems from here on. 
 
 Remember: **Compute = Carbon**, and your code has real-world impact.
