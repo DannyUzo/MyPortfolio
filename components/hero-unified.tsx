@@ -52,11 +52,11 @@ export function HeroUnified() {
           className="w-full flex-1"
         >
           <h1 className="text-4xl font-black leading-[1.35] tracking-tight text-zinc-950 dark:text-white sm:text-5xl md:text-[3.35rem]">
-            Frontend engineer, hardware prototyper & robotics researcher
+            Software engineer, technical writer & robotics researcher
           </h1>
 
           <p className="mt-8 max-w-4xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            I&apos;m Daniel Uzodinma, a frontend engineer documenting the intersection of interface systems, embedded hardware, mechatronics, and practical automation.
+            I&apos;m Daniel Uzodinma, a software engineer documenting the intersection of interface systems, embedded hardware, mechatronics, and practical automation.
           </p>
 
           <div className="mt-10 flex w-full flex-wrap gap-x-7 gap-y-5">
