@@ -1,73 +1,111 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Cpu, Monitor, Workflow } from "lucide-react"
 
-const tracks = [
+const nodes = [
   {
-    kicker: "The Screen",
-    title: "Frontend architectures with mechanical sympathy.",
-    description: "I build interfaces that stay understandable under real product pressure: typed data flow, resilient component boundaries, responsive layouts, and interaction states that make complex systems easier to operate.",
-    icon: Monitor,
-    points: ["Design systems", "Interactive dashboards", "Performance-minded React"],
+    tag: "sw",
+    label: "Interfaces",
+    detail:
+      "React and TypeScript apps that stay legible once real data, real users, and real edge cases show up. Dashboards, monitoring tools, typed state.",
+    spec: "React · TypeScript · Next.js",
   },
   {
-    kicker: "The Physical",
-    title: "Embedded systems that make software accountable.",
-    description: "Hardware work keeps the feedback loop honest. I document sensors, microcontrollers, automation logic, and firmware decisions with enough detail for another engineer to reproduce the path.",
-    icon: Cpu,
-    points: ["Microcontrollers and IoT", "Sensors and actuators", "Robotics prototyping"],
+    tag: "hw",
+    label: "Circuits",
+    detail:
+      "Microcontrollers, sensors, and edge inference. The layer that has to be right before any of the software above it means anything.",
+    spec: "Embedded C · TinyML · IoT",
   },
 ]
+
+// path baselines sit far from center so text blocks (above-left / below-right)
+// have full vertical clearance before hitting the line
+const TRACE_PATH = "M 60 170 L 300 170 L 380 40 L 460 210 L 540 70 L 760 70"
 
 export function ExpertiseSection() {
   return (
     <section id="about" className="grain-surface border-b border-border/60 bg-background py-28">
       <div className="mx-auto w-full max-w-6xl px-5">
-        <div className="grid gap-12 lg:grid-cols-[18rem_minmax(0,1fr)]">
-          <div>
-            <p className="font-mono text-sm uppercase tracking-[0.2em] text-primary">Operating model</p>
-            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-              Where interface craft meets physical systems.
-            </h2>
+        <p className="max-w-md text-lg leading-8 text-muted-foreground">
+          I work on both sides of the wire. The interface people touch, and
+          the hardware.
+        </p>
+
+        <div className="relative mt-20 h-[22rem] md:mt-24">
+          <svg
+            viewBox="0 0 800 240"
+            preserveAspectRatio="none"
+            className="absolute inset-0 h-full w-full overflow-visible"
+          >
+            <motion.path
+              d={TRACE_PATH}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="text-border"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              transition={{ duration: 1.1, ease: "easeInOut" }}
+              viewport={{ once: true }}
+            />
+
+            {/* endpoint terminals */}
+            <circle cx="60" cy="170" r="3.5" className="fill-primary" />
+            <circle cx="760" cy="70" r="3.5" className="fill-primary" />
+
+            {/* moving charges, staggered so it reads as current, not a blip */}
+            <circle r="4" className="fill-primary" opacity="0.5">
+              <animateMotion dur="5.4s" repeatCount="indefinite" path={TRACE_PATH} />
+            </circle>
+            <circle r="4" className="fill-primary" opacity="0.5">
+              <animateMotion
+                dur="5.4s"
+                begin="-1.7s"
+                repeatCount="indefinite"
+                path={TRACE_PATH}
+              />
+            </circle>
+          </svg>
+
+          <div className="absolute left-0 top-0 w-64 md:w-72">
+            <NodeCallout node={nodes[0]} delay={0.4} />
           </div>
 
-          <div className="grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-2">
-            {tracks.map((track, index) => (
-              <motion.article
-                key={track.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.55, delay: index * 0.08 }}
-                viewport={{ once: true }}
-                className="bg-card p-7"
-              >
-                <div className="mb-8 flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                    <track.icon className="h-4 w-4 text-primary" />
-                    {track.kicker}
-                  </div>
-                  <Workflow className="h-5 w-5 text-muted-foreground" />
-                </div>
-
-                <h3 className="text-2xl font-semibold leading-tight tracking-tight text-foreground">
-                  {track.title}
-                </h3>
-                <p className="mt-5 text-lg leading-8 text-muted-foreground">{track.description}</p>
-
-                <ul className="mt-8 space-y-3">
-                  {track.points.map((point) => (
-                    <li key={point} className="flex items-center gap-3 text-base text-foreground/85">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </motion.article>
-            ))}
+          <div className="absolute bottom-0 right-0 w-64 text-right md:w-72">
+            <NodeCallout node={nodes[1]} align="right" delay={0.6} />
           </div>
         </div>
       </div>
     </section>
+  )
+}
+
+function NodeCallout({
+  node,
+  align = "left",
+  delay,
+}: {
+  node: (typeof nodes)[number]
+  align?: "left" | "right"
+  delay: number
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: align === "right" ? 10 : -10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay }}
+      viewport={{ once: true }}
+      className={align === "right" ? "flex flex-col items-end" : ""}
+    >
+      <span className="font-mono text-xs uppercase tracking-[0.2em] text-primary">
+        {node.tag}
+      </span>
+      <h3 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+        {node.label}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-muted-foreground">{node.detail}</p>
+      <span className="mt-3 font-mono text-xs text-muted-foreground/60">{node.spec}</span>
+    </motion.div>
   )
 }

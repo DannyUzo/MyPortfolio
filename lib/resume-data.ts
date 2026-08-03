@@ -5,6 +5,8 @@ import Nuesa from "@/public/images/nuesa.png"
 import Gearsparks from "@/public/images/gearsparks_logo.jpg"
 import Mhetlabs from "@/public/images/Mhetlabs.png"
 import Platoons from "@/public/images/platoons.png"
+import Rain from "@/public/images/rain-logo.jpeg"
+import Amtes from "@/public/images/amtes-logo.jpeg"
 
 export const resumeData = {
   personalInfo: {
@@ -22,16 +24,6 @@ export const resumeData = {
   profile:
     "I'm a frontend engineer passionate about turning complex ideas into clean, responsive, and user-friendly web experiences. With a strong grasp of modern frontend technologies, I build scalable, fast, and functional web applications. Beyond just writing code, I think in terms of product value, focusing on user experience, performance, and maintainability. From integrating real-time features to handling tricky bugs or auth flows, I bring problem-solving and attention to detail. I'm constantly learning, and I love collaborating to ship features that make users happy and businesses grow.",
   professionalExperience: [
-    // {
-    //   company: "ZendFi",
-    //   image: Zendfi,
-    //   position: "Software Engineer",
-    //   duration: "11/2025 - Present",
-    //   location: "Lagos, Nigeria",
-    //   description:
-    //     "At ZendFi, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
-    //   desc: "Worked across product development, SDKs, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
-    // },
     {
       company: "GearSparks Consulting",
       image: Gearsparks,
@@ -42,6 +34,15 @@ export const resumeData = {
         "At Gearsparks, I Design, develop, and maintain modern, responsive frontend applications with a focus on performance, usability, and scalability. Implement product requirements into pixel-perfect user interfaces, integrating APIs and services seamlessly. Build and manage state, data flows, and component architectures using appropriate frontend frameworks and tools.",
       desc: "At Gearsparks, I Design, develop, and maintain modern, responsive frontend applications with a focus on performance, usability, and scalability. Build and manage state, data flows, and component architectures using appropriate frontend frameworks and tools. ",
     },
+    {
+      company: "AMTES Blog",
+      image: Amtes,
+      position: "Technical Blogger",
+      duration: "06/2026 - Present",
+      location: "Hybrid",
+      description: "At AMTES Blog, I write technical articles for the blog. I work closely with the backend engineers and designers to bring digital products to life within weeks.",
+      desc: "At AMTES Blog, I write technical articles (aspiring technical writer) to help demystify complex technical concepts in mechatronics for a broader audience while keeping the contents engaging and less boring.",
+    },
     // {
     //   company: "Mhetlabs",
     //   image: Mhetlabs,
@@ -49,8 +50,8 @@ export const resumeData = {
     //   duration: "06/2026 - Present",
     //   location: "Abeokuta, Nigeria",
     //   description:
-    //     "At Mhetlabs, I work across product development, SDKs, and production UI/UX updates—conducting user pain-point research to improve product experience and drive impact. I build and optimise scalable interfaces using Next.js, TypeScript, and Tailwind CSS; and implement client-side queries, payment gateways, onboarding flows, state management (Context API, Redux), Axios token handling, order and service management, real-time messaging, and role-based authentication.",
-    //   desc: "Lead frontend engineer working across product development, production UI/UX updates, and user research to improve product experience and ship scalable frontend features.",
+    //     "At Mhetlabs, I work on building fast and scalable frontend architectures. From landing pages, to user and admin dashboards, payments integrations and more. I work closely with backend engineers and designers to bring digital products to life within weeks.",
+    //   desc: "At Mhetlabs, I build fast and scalable frontend architectures collaborating with backend engineers and designers to bring digital products to life within weeks.",
     // },
     {
       company: "The Platoons Entertainment",
@@ -61,6 +62,15 @@ export const resumeData = {
       description:
         "I supported testing and optimization, connecting frontend components to backend APIs, implementing new designs, fixed bugs and improved performance. Collaborating with the company founder and lead developer.",
       desc: "Supported testing and optimization, connecting frontend components to backend APIs, implementing new designs, fixed bugs and improved performance. Collaborating with the company founder and lead developer.",
+    },
+    {
+      company: "RAIN-INN Funaab",
+      image: Rain,
+      position: "Robotics Lead",
+      duration: "08/2025 - 08/2026",
+      location: "Abeokuta, Nigeria",
+      description: "I served as the Robotics Lead for the student community at RAINI-INN FUNAAB, where I was responsible for developing and executing training curricula focused on robotics and Mechatronics. I mentored other students, fostering technical skills and collaborative project work. Additionally, I organized and led three major Deep Learning Workshops in partnership with Nvidia.",
+      desc: "As the Robotics Lead of the student community, I developed training curriculums and mentored other students in robotics and worked with my team to organise 3 Deep Learning Workshops partnering with Nvidia."
     },
     {
       company: "XplicitMode",
@@ -84,16 +94,16 @@ export const resumeData = {
     },
   ],
   internships: [
-    {
-      company: "NUTEC-FUNAAB",
-      image: Nutec,
-      position: "Frontend Engineering Intern",
-      duration: "02/2024 - 06/2024",
-      location: "Abeokuta, Nigeria",
-      description:
-        "Assisted senior developers with frontend development tasks while gaining hands-on experience with JavaScript, TypeScript, Tailwind CSS, and modern frontend frameworks like React and Next.js. Actively contributed in team meetings, shared ideas to improve workflows, and participated in real project cycles. During the internship, I took up a tutor role, where I trained and mentored fellow students in frontend engineering, helping them grasp key concepts and apply best practices in real-world projects.",
-      desc: "Assisted senior developers with frontend development tasks while gaining hands-on experience with JavaScript, TypeScript, Tailwind CSS and then took up a tutor role for the community",
-    },
+    // {
+    //   company: "NUTEC-FUNAAB",
+    //   image: Nutec,
+    //   position: "Frontend Engineering Intern",
+    //   duration: "02/2024 - 06/2024",
+    //   location: "Abeokuta, Nigeria",
+    //   description:
+    //     "Assisted senior developers with frontend development tasks while gaining hands-on experience with JavaScript, TypeScript, Tailwind CSS, and modern frontend frameworks like React and Next.js. Actively contributed in team meetings, shared ideas to improve workflows, and participated in real project cycles. During the internship, I took up a tutor role, where I trained and mentored fellow students in frontend engineering, helping them grasp key concepts and apply best practices in real-world projects.",
+    //   desc: "Assisted senior developers with frontend development tasks while gaining hands-on experience with JavaScript, TypeScript, Tailwind CSS and then took up a tutor role for the community",
+    // },
     {
       company: "Zuri Internship(HNGx)",
       image: Zuri,
@@ -151,14 +161,14 @@ export const resumeData = {
       github: "https://github.com/DannyUzo/Jotion",
       tags: ["Fullstack"]
     },
-    {
-      name: "Sweet Foundry",
-      technologies: ["NextJs", "TailwindCSS", "Gsap", "Framer-motion"],
-      description: "Responsive image gallery application with image download.",
-      link: "https://sweet-foundry.vercel.app/",
-      github: "https://github.com/DannyUzo/sweet-foundry",
-      tags: ["GSAP Animations"]
-    },
+    // {
+    //   name: "Sweet Foundry",
+    //   technologies: ["NextJs", "TailwindCSS", "Gsap", "Framer-motion"],
+    //   description: "Responsive image gallery application with image download.",
+    //   link: "https://sweet-foundry.vercel.app/",
+    //   github: "https://github.com/DannyUzo/sweet-foundry",
+    //   tags: ["GSAP Animations"]
+    // },
     // {
     //   name: "ImageGo",
     //   technologies: ["ReactJs", "Unsplash API"],
@@ -182,7 +192,7 @@ export const resumeData = {
       image: "",
       stack: ["C++", "Embedded C/C++", "Arduino IDE"],
       link: "",
-      github: "https://github.com/DannyUzo/LineFollower",
+      // github: "https://github.com/DannyUzo/LineFollower",
       components: ["PZEM-004T v3.0", "Relay Module", "ILI9341 TFT Display", "4×4 Matrix Keypad", "PIR Motion Sensor", "mmWave Radar Sensor", "EEPROM"],
       microcontrollers: ["Arduino Mega 2560"],
       firmwareStack: ["C++", "PZEM004Tv30", "Adafruit ILI9341", "Keypad", "SoftwareSerial"],
@@ -194,7 +204,7 @@ export const resumeData = {
       image: "",
       stack: ["C++", "ESP8266", "IoT", ""],
       link: "",
-      github: "https://github.com/DannyUzo/IoT-Weather",
+      // github: "https://github.com/DannyUzo/IoT-Weather",
       components: ["Fire Sensor", "Temperature Sensor (DHT11)", "Smoke Sensor (MQ-2)", "Relay Module", "Water Pump", "Indicator Lights"],
       microcontrollers: ["ESP8266"],
       firmwareStack: ["C++", "Arduino IoT Cloud"],

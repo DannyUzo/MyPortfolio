@@ -25,7 +25,7 @@ export default async function BlogIndex() {
             Engineering Logbook
           </p>
           <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
-            Frontend systems, robotic mechanisms, and field notes from the bench.
+            Software systems, robotic mechanisms, and field notes from the bench.
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-9 text-muted-foreground">
             A technical journal for implementation details, hardware experiments,

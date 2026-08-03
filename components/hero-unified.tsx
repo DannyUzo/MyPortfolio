@@ -44,7 +44,7 @@ const graphCells = Array.from({ length: 84 }, (_, index) => {
 export function HeroUnified() {
   return (
     <section className="grain-surface min-h-screen overflow-hidden border-b border-zinc-200 pt-24 text-zinc-950 dark:border-white/10 dark:text-white">
-      <div className="lg:mx-40 flex w-full max-w-[1020px] items-start px-6 pb-20 pt-20">
+      <div className="lg:mx-40 flex w-full max-w-[1020px] items-start px-6 pb-20 pt-40">
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -56,7 +56,7 @@ export function HeroUnified() {
           </h1>
 
           <p className="mt-8 max-w-4xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            I&apos;m Daniel Uzodinma, a software engineer documenting the intersection of interface systems, embedded hardware, mechatronics, and practical automation.
+            I&apos;m Daniel Uzodinma, a software engineer transitioning into robotics and intelligent systems. My focus is on bridging machine learning algorithms with robust, real-time hardware execution
           </p>
 
           <div className="mt-10 flex w-full flex-wrap gap-x-7 gap-y-5">

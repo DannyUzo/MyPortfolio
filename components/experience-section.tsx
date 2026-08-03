@@ -64,7 +64,7 @@ export function ExperienceSection() {
                 </p>
                 <p className="inline-flex items-center gap-2 md:justify-end">
                   <MapPin className="h-4 w-4" />
-                  Remote / Field
+                  {exp.location}
                 </p>
               </div>
             </motion.article>

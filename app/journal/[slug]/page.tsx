@@ -136,8 +136,7 @@ function ArticleShell({
           <div className="space-y-8 border-t border-border pt-6">
             <SidebarSection title="Author">
               <p className="text-sm leading-6 text-muted-foreground">
-                Uzodinma Daniel writes about frontend architecture, embedded systems,
-                robotics experiments, and the practical overlap between software and machines.
+                Uzodinma Daniel
               </p>
             </SidebarSection>
 
