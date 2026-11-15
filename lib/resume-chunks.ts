@@ -40,7 +40,7 @@ export const resumeChunks: string[] = [
 
   // --- Hardware projects ---
   ...hardwareProjects.map(
-    p => `Hardware Project: ${p.title}. ${p.description} Stack: ${p.stack.join(", ")}. Microcontrollers: ${p.microcontrollers.join(", ")}. Firmware stack: ${p.firmwareStack.join(", ")}. GitHub: ${p.github}.`
+    p => `Hardware Project: ${p.title}. ${p.description} Stack: ${p.stack.join(", ")}. Microcontrollers: ${p.microcontrollers.join(", ")}. Firmware stack: ${p.firmwareStack.join(", ")}. GitHub: ${"github" in p ? p.github : "N/A"}.`
   ),
 
   // --- Education ---

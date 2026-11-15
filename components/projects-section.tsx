@@ -7,6 +7,34 @@ import { resumeData } from "@/lib/resume-data"
 import Link from "next/link"
 
 export function ProjectsSection() {
+  const featuredProjects = [
+    {
+      name: resumeData.projects[0].name,
+      category: "Software",
+      description: resumeData.projects[0].description,
+      technologies: resumeData.projects[0].technologies,
+      github: resumeData.projects[0].github,
+      link: resumeData.projects[0].link,
+    },
+    {
+      name: resumeData.aiProjects[0].title,
+      category: "ML/AI",
+      description: resumeData.aiProjects[0].description,
+      technologies: resumeData.aiProjects[0].stack,
+      github: resumeData.aiProjects[0].github,
+      link: resumeData.aiProjects[0].link,
+    },
+    {
+      name: resumeData.hardwareProjects[0].title,
+      category: "Hardware",
+      description: resumeData.hardwareProjects[0].description,
+      technologies: resumeData.hardwareProjects[0].stack,
+      link: resumeData.hardwareProjects[0].firmwareSlug
+        ? `/work/${resumeData.hardwareProjects[0].firmwareSlug}`
+        : undefined,
+    },
+  ]
+
   return (
     <section id="projects" className="grain-surface border-b border-border/60 bg-background py-28">
       <div className="mx-auto w-full max-w-6xl px-5">
@@ -23,7 +51,7 @@ export function ProjectsSection() {
         </div>
 
         <div className="grid gap-px overflow-hidden rounded-xl border border-border md:grid-cols-2 lg:grid-cols-3">
-          {resumeData.projects.map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <motion.article
               key={project.name}
               initial={{ opacity: 0, y: 20 }}
@@ -34,7 +62,7 @@ export function ProjectsSection() {
             >
               <div className="mb-8 flex items-center justify-between font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                 <span>Project / 0{index + 1}</span>
-                <span>{project.tags}</span>
+                <span>{project.category}</span>
               </div>
 
               <h3 className="text-2xl font-semibold leading-tight tracking-tight text-foreground">{project.name}</h3>

@@ -187,6 +187,17 @@ export const resumeData = {
   ],
   hardwareProjects: [
     {
+      title: "Automated Colour Sorting Device",
+      description: "An ESP32-based colour sorting system that uses a TCS3200 sensor, dual servos, and a finite state machine to classify and route red, green, blue, yellow, and unknown objects.",
+      image: "",
+      stack: ["C++", "Embedded C/C++", "Arduino IDE", "Finite State Machine"],
+      link: "",
+      components: ["TCS3200 Colour Sensor", "Positioning Servo", "Diverter Servo"],
+      microcontrollers: ["ESP32 Dev Board"],
+      firmwareStack: ["C++", "pulseIn", "Smoothstep Servo Motion", "UART Serial Logging"],
+      firmwareSlug: "automated-colour-sorting-device",
+    },
+    {
       title: "Smart Home Energy Management System (Course Work)",
       description: "A multi-branch energy monitoring and control system that tracks real-time power consumption, enforces energy budgets, and responds automatically to human presence.",
       image: "",

@@ -1,0 +1,340 @@
+---
+title: "Automated Colour Sorting Device with ESP32 and TCS3200"
+author: "Daniel Uzodinma"
+date: "2026-11-15"
+description: "Standalone ESP32 firmware for calibrating a TCS3200 colour sensor and detecting red, green, blue, and yellow objects by closest calibrated match."
+tags: ["ESP32", "TCS3200", "Embedded C++", "Colour Sensing", "Calibration"]
+---
+
+This firmware is a standalone test and calibration tool for the colour-sensing stage of the automated sorting device. It reads the TCS3200 frequency output, stores one reference reading for each calibrated colour, and identifies objects using the closest calibrated RGB pulse-width reading.
+
+## Hardware Wiring
+
+<table>
+  <thead>
+    <tr>
+      <th>TCS3200 pin</th>
+      <th>ESP32 pin</th>
+      <th>Function</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>VCC</td><td>3.3V</td><td>Power</td></tr>
+    <tr><td>GND</td><td>GND</td><td>Ground</td></tr>
+    <tr><td>S0</td><td>GPIO 2</td><td>Frequency scaling</td></tr>
+    <tr><td>S1</td><td>GPIO 4</td><td>Frequency scaling</td></tr>
+    <tr><td>S2</td><td>GPIO 16</td><td>Photodiode selection</td></tr>
+    <tr><td>S3</td><td>GPIO 17</td><td>Photodiode selection</td></tr>
+    <tr><td>OUT</td><td>GPIO 5</td><td>Frequency output</td></tr>
+    <tr><td>OE</td><td>GND</td><td>Always enabled</td></tr>
+  </tbody>
+</table>
+
+The sensor uses 20% frequency scaling. Because the output is measured as a pulse period, a lower `pulseIn` value means a higher frequency and stronger reflected light in that channel.
+
+## Calibration Workflow
+
+1. Upload the firmware and open the serial monitor at `115200` baud.
+2. With no cap over the sensor, run `baseline` to record the empty-sensor reading.
+3. Place each cap over the sensor and run `cal red`, `cal green`, `cal blue`, or `cal yellow`.
+4. Use `status` to inspect saved reference readings.
+5. Use `detect` for a single reading or `watch` for continuous cap detection.
+6. Use `stop` to exit stream or watch mode.
+
+Calibration is held in RAM and must be repeated after a restart. The `UNKNOWN_THRESHOLD` and `PRESENCE_THRESHOLD` constants can be adjusted for the sensor, lighting, and object distance used in the physical build.
+
+## Firmware
+
+```cpp
+/*
+ * ============================================================
+ *  TCS3200 Color Sensor - Standalone Test & Calibration Tool
+ *  Board: ESP32
+ * ============================================================
+ *  WIRING:
+ *    TCS3200 VCC  ->  3.3V
+ *    TCS3200 GND  ->  GND
+ *    TCS3200 S0   ->  GPIO 2
+ *    TCS3200 S1   ->  GPIO 4
+ *    TCS3200 S2   ->  GPIO 16
+ *    TCS3200 S3   ->  GPIO 17
+ *    TCS3200 OUT  ->  GPIO 5
+ *    TCS3200 OE   ->  GND  (always enabled)
+ * ============================================================
+ */
+
+#define S0   2
+#define S1   4
+#define S2   16
+#define S3   17
+#define OUT  5
+
+struct RGB { long r, g, b; };
+
+RGB CAL_LOW[4];
+RGB CAL_HIGH[4];
+
+RGB CAL[4] = {
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0},
+  {0, 0, 0}
+};
+
+bool calDone[4] = {false, false, false, false};
+
+const char* COLOR_NAMES[4] = {"Red", "Green", "Blue", "Yellow"};
+#define UNKNOWN_THRESHOLD  80
+#define PRESENCE_THRESHOLD 25
+
+RGB baseline = {0, 0, 0};
+
+void setup() {
+  Serial.begin(115200);
+  delay(500);
+
+  pinMode(S0, OUTPUT);
+  pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT);
+  pinMode(S3, OUTPUT);
+  pinMode(OUT, INPUT);
+
+  digitalWrite(S0, HIGH);
+  digitalWrite(S1, LOW);
+
+  Serial.println("\n========================================");
+  Serial.println("  TCS3200 Color Sensor Test Tool");
+  Serial.println("========================================");
+  Serial.println("Commands:");
+  Serial.println("  read           - print one RGB reading");
+  Serial.println("  stream         - print readings every second");
+  Serial.println("  stop           - stop streaming");
+  Serial.println("  baseline       - calibrate empty sensor");
+  Serial.println("  cal red        - save Red calibration");
+  Serial.println("  cal green      - save Green calibration");
+  Serial.println("  cal blue       - save Blue calibration");
+  Serial.println("  cal yellow     - save Yellow calibration");
+  Serial.println("  detect         - identify cap color once");
+  Serial.println("  watch          - detect color continuously");
+  Serial.println("  status         - show saved calibrations");
+  Serial.println("========================================\n");
+
+  doBaseline();
+}
+
+long readChannel(bool s2val, bool s3val) {
+  digitalWrite(S2, s2val);
+  digitalWrite(S3, s3val);
+  delay(50);
+  return pulseIn(OUT, LOW, 100000);
+}
+
+RGB readRGB() {
+  return {
+    readChannel(LOW, LOW),
+    readChannel(HIGH, HIGH),
+    readChannel(LOW, HIGH)
+  };
+}
+
+RGB averageRGB(int samples) {
+  long rs = 0, gs = 0, bs = 0;
+  for (int i = 0; i < samples; i++) {
+    RGB reading = readRGB();
+    rs += reading.r;
+    gs += reading.g;
+    bs += reading.b;
+    delay(20);
+  }
+  return {rs / samples, gs / samples, bs / samples};
+}
+
+float rgbDist(RGB a, RGB b) {
+  return sqrt(
+    pow((float)(a.r - b.r), 2) +
+    pow((float)(a.g - b.g), 2) +
+    pow((float)(a.b - b.b), 2)
+  );
+}
+
+void doBaseline() {
+  Serial.println("[BASELINE] Remove all caps from sensor...");
+  delay(2000);
+  Serial.println("[BASELINE] Sampling 15 readings...");
+  baseline = averageRGB(15);
+  Serial.printf("[BASELINE] Done -> R=%-6ld G=%-6ld B=%ld\n",
+    baseline.r, baseline.g, baseline.b);
+  Serial.println("[BASELINE] Now place a cap to begin.\n");
+}
+
+bool capPresent(RGB reading) {
+  return rgbDist(reading, baseline) > PRESENCE_THRESHOLD;
+}
+
+int detectColor(RGB reading) {
+  float minDist = 9999;
+  int best = -1;
+
+  for (int i = 0; i < 4; i++) {
+    if (!calDone[i]) continue;
+    float distance = rgbDist(reading, CAL[i]);
+    if (distance < minDist) {
+      minDist = distance;
+      best = i;
+    }
+  }
+
+  if (best == -1) return -1;
+  return (minDist < UNKNOWN_THRESHOLD) ? best : -1;
+}
+
+void printRGB(RGB reading, const char* label = nullptr) {
+  if (label) Serial.printf("[%s] ", label);
+  Serial.printf("R=%-6ld G=%-6ld B=%-6ld", reading.r, reading.g, reading.b);
+
+  Serial.print("  |");
+  int rb = map(reading.r, 0, 2000, 20, 0);
+  int gb = map(reading.g, 0, 2000, 20, 0);
+  int bb = map(reading.b, 0, 2000, 20, 0);
+  rb = constrain(rb, 0, 20);
+  gb = constrain(gb, 0, 20);
+  bb = constrain(bb, 0, 20);
+
+  for (int i = 0; i < rb; i++) Serial.print("R");
+  Serial.print("|");
+  for (int i = 0; i < gb; i++) Serial.print("G");
+  Serial.print("|");
+  for (int i = 0; i < bb; i++) Serial.print("B");
+  Serial.println("|");
+}
+
+bool streaming = false;
+bool watching = false;
+unsigned long lastPrint = 0;
+
+void loop() {
+  if (Serial.available()) {
+    String cmd = Serial.readStringUntil('\n');
+    cmd.trim();
+    cmd.toLowerCase();
+
+    if (cmd == "read") {
+      RGB reading = averageRGB(5);
+      printRGB(reading, "READ");
+
+    } else if (cmd == "stream") {
+      streaming = true;
+      watching = false;
+      Serial.println("[STREAM] Started. Type 'stop' to end.");
+
+    } else if (cmd == "stop") {
+      streaming = false;
+      watching = false;
+      Serial.println("[STOP] Stopped.");
+
+    } else if (cmd == "baseline") {
+      streaming = false;
+      watching = false;
+      doBaseline();
+
+    } else if (cmd == "detect") {
+      RGB reading = averageRGB(8);
+      printRGB(reading, "SAMPLE");
+      int index = detectColor(reading);
+
+      if (index >= 0) {
+        Serial.printf("[DETECT] -> %s\n\n", COLOR_NAMES[index]);
+      } else {
+        bool anyCalibration = false;
+        for (int i = 0; i < 4; i++) {
+          if (calDone[i]) anyCalibration = true;
+        }
+
+        if (!anyCalibration) {
+          Serial.println("[DETECT] -> No calibration saved yet. Run 'cal red' etc. first.\n");
+        } else {
+          Serial.println("[DETECT] -> Unknown (no match within threshold)\n");
+        }
+      }
+
+    } else if (cmd == "watch") {
+      watching = true;
+      streaming = false;
+      Serial.println("[WATCH] Watching for caps. Type 'stop' to end.\n");
+
+    } else if (cmd == "status") {
+      Serial.println("\n-- Saved Calibrations ------------------");
+      for (int i = 0; i < 4; i++) {
+        if (calDone[i]) {
+          Serial.printf("  %-7s -> R=%-6ld G=%-6ld B=%ld\n",
+            COLOR_NAMES[i], CAL[i].r, CAL[i].g, CAL[i].b);
+        } else {
+          Serial.printf("  %-7s -> (not calibrated)\n", COLOR_NAMES[i]);
+        }
+      }
+      Serial.printf("  Baseline -> R=%-6ld G=%-6ld B=%ld\n",
+        baseline.r, baseline.g, baseline.b);
+      Serial.println("----------------------------------------\n");
+
+    } else if (cmd.startsWith("cal ")) {
+      String color = cmd.substring(4);
+      int index = -1;
+      if (color == "red") index = 0;
+      if (color == "green") index = 1;
+      if (color == "blue") index = 2;
+      if (color == "yellow") index = 3;
+
+      if (index < 0) {
+        Serial.println("[CAL] Unknown color. Use: cal red / green / blue / yellow");
+      } else {
+        Serial.printf("[CAL] Hold %s cap steady over sensor...\n", COLOR_NAMES[index]);
+        delay(500);
+        Serial.println("[CAL] Sampling 15 readings for accuracy...");
+        RGB reading = averageRGB(15);
+        CAL[index] = reading;
+        calDone[index] = true;
+        printRGB(reading, COLOR_NAMES[index]);
+        Serial.printf("[CAL] %s saved\n\n", COLOR_NAMES[index]);
+
+        bool allDone = true;
+        for (int i = 0; i < 4; i++) {
+          if (!calDone[i]) allDone = false;
+        }
+        if (allDone) {
+          Serial.println("[CAL] All 4 colors calibrated! Try 'detect' or 'watch' now.\n");
+        }
+      }
+
+    } else if (cmd.length() > 0) {
+      Serial.printf("[?] Unknown command: '%s'\n", cmd.c_str());
+    }
+  }
+
+  if (streaming && millis() - lastPrint > 1000) {
+    RGB reading = readRGB();
+    printRGB(reading, "STREAM");
+    lastPrint = millis();
+  }
+
+  if (watching && millis() - lastPrint > 300) {
+    RGB reading = readRGB();
+    if (capPresent(reading)) {
+      delay(200);
+      RGB average = averageRGB(6);
+      int index = detectColor(average);
+
+      if (index >= 0) {
+        Serial.printf("[WATCH] Cap detected -> %s   (R=%-5ld G=%-5ld B=%ld)\n",
+          COLOR_NAMES[index], average.r, average.g, average.b);
+      } else {
+        Serial.printf("[WATCH] Cap detected -> UNKNOWN  (R=%-5ld G=%-5ld B=%ld)\n",
+          average.r, average.g, average.b);
+      }
+
+      while (capPresent(readRGB())) delay(100);
+      Serial.println("[WATCH] Cap removed. Waiting...\n");
+    }
+    lastPrint = millis();
+  }
+}
+```

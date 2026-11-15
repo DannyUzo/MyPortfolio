@@ -28,7 +28,7 @@ export default function FirmwarePage({ params }: { params: Params }) {
             <span>/</span>
             <Link href="/work" className="hover:text-primary">Work</Link>
             <span>/</span>
-            <span className="text-primary">Firmware</span>
+            <span aria-current="page" className="truncate text-primary">{post.title}</span>
           </nav>
 
           <header>

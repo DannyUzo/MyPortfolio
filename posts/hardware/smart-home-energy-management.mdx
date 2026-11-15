@@ -6,7 +6,6 @@ description: "A deep dive into a multi-branch energy monitoring and control syst
 tags: ["Arduino", "IoT", "Embedded C++", "Energy Management", "Home Automation"]
 ---
 
-# Smart Home Energy Management System
 
 Managing electricity consumption in a smart home isn't just about convenience — it's about awareness, safety, and efficiency. This project implements a **multi-branch energy monitoring and control system** that tracks real-time power consumption across three circuit branches, enforces energy budgets, and automatically responds to human presence.
 
@@ -47,11 +46,16 @@ The firmware is written in **C++** using the Arduino IDE. Install the following 
 
 When the user enters a total `kWh` budget via the keypad, the system distributes it across the 3 branches based on their **maximum current ratings**:
 
-| Branch | Max Current | Weight |
-| --- | --- | --- |
-| Branch 1 | 16A | ~51.6% |
-| Branch 2 | 10A | ~32.3% |
-| Branch 3 | 5A | ~16.1% |
+<table>
+  <thead>
+    <tr><th>Branch</th><th>Max Current</th><th>Weight</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Branch 1</td><td>16A</td><td>~51.6%</td></tr>
+    <tr><td>Branch 2</td><td>10A</td><td>~32.3%</td></tr>
+    <tr><td>Branch 3</td><td>5A</td><td>~16.1%</td></tr>
+  </tbody>
+</table>
 
 This proportional allocation ensures heavier circuits get more budget, mirroring real-world electrical demand.
 
@@ -79,12 +83,17 @@ The **ILI9341 TFT** provides a live dashboard:
 
 The **4×4 keypad** handles all input:
 
-| Key | Action |
-| --- | --- |
-| `0–9` | Enter unit digits |
-| `#` | Confirm allocation |
-| `*` | Clear input |
-| `D` | Full system reset |
+<table>
+  <thead>
+    <tr><th>Key</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>0-9</code></td><td>Enter unit digits</td></tr>
+    <tr><td><code>#</code></td><td>Confirm allocation</td></tr>
+    <tr><td><code>*</code></td><td>Clear input</td></tr>
+    <tr><td><code>D</code></td><td>Full system reset</td></tr>
+  </tbody>
+</table>
 
 ---
 
